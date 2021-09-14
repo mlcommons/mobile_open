@@ -1,0 +1,15 @@
+# post-training quantization
+
+## environment
+
+- quantize environment: tf2.2
+- eval environment: tf2.2
+
+## evaluation
+- On PC
+	- freeze_ptq.tflite
+		- miou: 0.5469
+
+- On device CPU
+	- freeze_ptq.tflite
+		- miou: 0.5401

@@ -1,0 +1,138 @@
+= MLPerf Mobile v1.1 Submission Process and Auditing Protocols
+
+
+== MLPerf Mobile WG
+
+=== Submission Procedure Overview
+. Sign MLC CLA
+. If you have any questions, contact David Kanter <david@mlcommons.org> 
+. Read and abide by confidentiality statement(s) in the repos https://github.com/mlcommons/mobile/blob/master/CONFIDENTIALITY.md 
+. Follow “Backend Integration Procedure” below
+. Validate the required accuracy targets are met and/or share achieved accuracy with the groups to discuss adjustment of accuracy targets as appropriate to the models
+. Once the vendor integration is complete and accuracy targets are finalized, prepare the submission:
+. Follow “Vendor Submission Deliverables” below
+
+
+=== Submission Procedure [Github]
+. Build MLPerf mobile app from mobile_app_open repo (the branch will be specified)
+. Fork the MLPerf mobile app code
+. Update the LoadGen with the designated commit ID 
+. Integrate vendor backend (if you need to do so)
+. Build vendor forked app	
+. Use the BM ower scripts to download validation data sets and push to device: ImageNet, COCO, ADE20K, SQUAD 1.1
+. Load inference data set(s) -- do not use the dummy dataset! 
+. Run benchmark in submission mode to validate accuracy and measure inference performance on the device under test (refers to the vendor submission run conditions)
+. Prepare the deliverable for submissions (Refer to Result Submission Procedure & Vendor Submission Deliverables)
+	
+
+=== Vendor Submission Run Conditions
+==== Out of the Box status
+. No rooting allowed for phones submitted under Available category  
+. Must use SE-Enforce mode for phones submitted under Available category
+. APP can be installed after a Factory Reset (pick one of the following):
+. Submitter can decide: Factory reset, no updates allowed
+. Submitters can decide: Factory reset, required to update.
+
+==== Number of iterations
+1
+
+==== Temperature range
+* What is the temperature range we want to accept?
+** Consistency between runs and devices is the most important. Normal room temperature between 20-25 centigrade will suffice, but exact temperature should be recorded. 
+** Phone should be well ventilated. ( i.e. not be flush on a surface (the back of the phone shouldn’t be in full contact with a table). Using a baking sheet or a wire grid should work, and will probably be easiest to maintain consistency for MLPerf participants.)
+** When running the benchmark, the “break setting” for the interval between running the different ML tasks is from 0 to 5 mins
+** If running the benchmark multiple times, there should be at least 10 minute cooldown mode
+
+==== Smartphone mode
+. The device can be in airplane mode
+. The device wifi can be turned off 
+. The device should not be plugged into external power.
+. The device can be run with minimum brightness
+
+
+=== Result Submission Procedure
+* Submitter will be required to provide both the inference and accuracy results for all 4 models under single-stream scenario and MobilenetEdgeTPU offline scenario directly from the UI of the mlperf app compiled by the submitter
+* The minimum sample and time duration for both inference and accuracy run for each model can be found in Scenario under Best Practice
+* The individual inference latency result submission must be from the same run, and the individual accuracy results must be from the same run
+
+=== Vendor Submission Deliverables
+- Submitter need to make a device available for MLCommons audit at beginning of audit period by either option below: 1) Submitter will gift or lend MLCommons a device and mail it to them 2) MLCommons will purchase the device at the Submitters expense
+- Generate inference performance results on commercially available device
+- Generate accuracy results on same commercially available device
+- Specification of the device in JSON format
+-- The necessary fields are here
+- Push code to private vendor repo, if needed:
+** Fork of mobile_app containing
+*** Build instructions for integration with vendor SDK
+*** Backend SDK glue code
+*** Per model runtime config options
+*** Pre-processing, post-processing code
+*** Additional changes beside vendor’s proprietary SDK
+** Along with submission, check-in writeup to describe quantization methodology
+*** See example write-up here
+
+** Fill out the submission checklist and submit as part of submission
+
+** Email the submission results before submission deadline *1pm PST*
+*** Make copy of submission results template
+*** Enter your submission scores
+**** Precision / 2 decimal places
+*** Fill out submission email
+**** Email to David Kanter <david@mlcommons.org> and cc chairs 
+**** Subject: [ MLPerf Mobile Submission ] <Vendor> 
+***Attach submission results as Excel spreadsheet
+***Add checklist
+*** Send!
+
+** Push the submission entry (see below) to GitHub
+** Send submission device with submission code to the designated auditor 
+
+=== Vendor Submission Directory Structure
+* <Closed/Open>/
+** <Submitting Organization>
+*** code/
+**** <benchmark name>/
+**** <vendor's backend>/ # if needed
+*** measurements /
+**** <device_id>/
+***** <benchmark name>/
+****** <senario>/
+******* <device_id>_<backend_name>_<scenario>.json
+*** results/
+**** <benchmark name>/
+***** <scenario>/
+****** log_accuracy/
+******* mlperf_log_accuracy.json
+******* mlperf_log_detail.txt
+******* mlperf_log_summary.txt
+******* mlperf_log_trace.json
+****** log_performance/
+******* mlperf_log_accuracy.json  # not important
+******* mlperf_log_detail.txt
+******* mlperf_log_summary.txt
+******* mlperf_log_trace.json
+**** result.json
+**** results_accuracy.jpg  # screenshot of accuracy result
+**** results_performance.jpg  # screenshot of performance result
+*** systems
+**** <device_id>.json
+*** calibration.md  # quantization writeup
+
+*<Benchmark name>* = {mobilenetEdgeTPU, mobiledetSSD, mobileBERT, deeplabV3+} +
+*<scenario>* = {SingleStream, Offline}
+
+=== Post-Submission Review/Audit
+*** Attend the review meetings
+*** Check and track GitHub issues
+*** Know the review timeline
+
+
+=== Audit Procedure
+After result submission date
+
+* MLCommon (David Kanter) will take each vendor’s submission code (with instruction), generate the vendor-specific backend, and integrate with the MLperf app front end (and vendor’s SDK, if applicable) to create a vendor specific mlperf app for each submitter. These apps will be upstreamed to MLCommon github for each submitter to reproduce other submitter’s results
+* Submitters can try to reproduce other submitter’s claimed results with the vendor-specific mlperf app provided by MLcommon. If a submitter has issue on obtaining another submitter’s device under test, MLCommon (David Kanter) can test on submitter’s behalf
+** The procedure for reproducing result should be same as mentioned in Result Submission Procedure
+* Each submitter can examine each other’s source codes, quantization methodology, pre/post processing procedure, inference, and accuracy log files.
+* For result objection filing and resolution. Refer to Best Practice
+

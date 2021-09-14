@@ -1,0 +1,6 @@
+The steps to convert the TF 2.0 model to a 1.15 compliant model are:
+
+${TENSORFLOW_PATH}/bazel-bin/tensorflow/tools/graph_transforms/transform_graph --in_graph=$MODEL_PATH/frozen_graph_tf1x.pb --out_graph=$MODEL_PATH/frozen_graph_tf1x_transform.pb --inputs='input' --outputs='MobilenetEdgeTPU/Predictions/Softmax' --transforms='remove_attribute(op_name=FusedBatchNormV3, attribute_name=exponential_avg_factor) fold_batch_norms fold_old_batch_norms strip_unused_nodes'
+
+${TENSORFLOW_PATH}/bazel-bin/tensorflow/tools/graph_transforms/transform_graph --in_graph=$MODEL_PATH/frozen_graph_tf1x_transform.pb --out_graph=$MODEL_PATH/frozen_graph_tf1x_transform.pb --inputs='input' --outputs='MobilenetEdgeTPU/Predictions/Softmax' --transforms='remove_attribute(op_name=DepthwiseConv2dNative, attribute_name=explicit_paddings) fold_batch_norms fold_old_batch_norms strip_unused_nodes'
+

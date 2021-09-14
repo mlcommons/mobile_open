@@ -1,0 +1,10 @@
+- On PC
+	- float/model.ckpt-200000
+		- miou: 0.5528
+
+	- float/freeze.pb
+		- miou: 0.5528
+
+- On device CPU
+	- float/freeze.tflite
+		- miou: 0.5501

@@ -1,0 +1,13 @@
+- On PC
+	- qat/model.ckpt-100000
+		- miou: 0.5553
+
+	- qat/freeze.pb
+		- miou: 0.5553
+
+	- qat/freeze.tflite
+		- miou: 0.5483
+
+- On device CPU
+	- qat/freeze.tflite
+		- miou: 0.5467

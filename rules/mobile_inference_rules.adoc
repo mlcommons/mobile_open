@@ -1,0 +1,670 @@
+:toc:
+:toclevels: 4
+
+:sectnums:
+
+= MLPerf Mobile Inference Rules
+
+Version 0.2
+Updated Aug 11, 2020
+This version has been updated, but is not yet final.
+
+Points of contact: David Kanter (david@mlcommons.org), William Chou
+(wchou@qti.qualcomm.com), Wookie Hong (jwookie.hong.partner@gmail.com), Ramesh Chukka (ramesh.n.chukka@intel.com)
+
+== Overview
+
+This document describes how to implement one or more benchmarks in the MLPerf Mobile
+Inference Suite and how to use those implementations to measure the performance
+of an ML mobile phone/tablet/laptop performing inference.
+
+
+The MLPerf name and logo are trademarks. In order to refer to a result using the
+MLPerf name, the result must conform to the letter and spirit of the rules
+specified in this document. The MLCommons organization reserves the right to solely
+determine if a use of its name or logo is acceptable.
+
+=== Definitions (read this section carefully)
+
+The following definitions are used throughout this document:
+
+A _sample_ is the unit on which inference is run, E.g., an image, or a sentence.
+
+A _query_ is a set of N samples that are issued to an inference system
+together. N is a positive integer. For example, a single query contains 8
+images.
+
+_Quality_ always refers to a model’s ability to produce “correct” outputs.
+
+A _system under test_ consists of a defined set of hardware and software
+resources that will be measured for performance.  The hardware resources may
+include processors, accelerators, memories, disks, and interconnect. The
+software resources may include an operating system, compilers, libraries, and
+drivers that significantly influences the running time of a benchmark.
+
+A _reference implementation_ is a specific implementation of a benchmark
+provided by the MLPerf organization.  The reference implementation is the
+canonical implementation of a benchmark. All valid submissions of a benchmark
+must be *equivalent* to the reference implementation.
+
+A _run_ is a complete execution of a benchmark implementation on a system under
+the control of the load generator that consists of completing a set of inference
+queries, including data pre- and post-processing, meeting a latency requirement
+and a quality requirement in accordance with a scenario.
+
+A _run result_ consists of the scenario-specific metric.
+
+== General rules
+
+The following rules apply to all benchmark implementations.
+
+=== Strive to be fair
+
+Benchmarking should be conducted to measure the framework and system performance
+as fairly as possible. Ethics and reputation matter.
+
+=== System and framework must be consistent
+
+The same system  (phone, laptop) and framework (Vendor SDK, TFlite delegates, or 
+NNAPI) must be used for a suite result or set of benchmark results reported in a
+single context.
+
+=== System and framework must be available
+
+If you are measuring the performance of a publicly available and widely-used
+system or framework, you must use publicly available and widely-used versions of
+the system or framework.  This class of systems will be called Available Systems, and 
+availability here means the device is a publicly available commercial device. 
+It includes smartphones, laptops, and other consumer battery powered devices, 
+but excludes rooted devices. 
+
+If you are measuring the performance of an experimental framework or system, you
+must make the system and framework you use available upon demand for
+replication by MLCommons.  This class of systems will be called RDI (research,
+development, internal). RDI systems include reference hardware and software
+modifications such as rooted phones.
+
+For Available Systems, devices used for testing should be publicly available as 
+commercial devices and device rooting is not allowed. For RDI Systesm, hardware and
+software changes such as rooting should be explicitly mentioned in the device name.
+
+=== Benchmark implementations must be shared
+
+Source code used for the benchmark implementations must be available under a license that permits MLCommon to use the implementation for benchmarking. The submission source code (preprocessing, post processing, and vendor’s glue code with the mlperf app) and logs must be made available to other submitters for auditing purposes
+
+=== Non-determinism is restricted
+
+The only forms of acceptable non-determinism are:
+
+* Floating point operation order
+
+* Random traversal of the inputs
+
+* Rounding
+
+All random numbers must be based on fixed random seeds and a deterministic random
+number generator. The deterministic random number generator is the Mersenne Twister
+19937 generator ([std::mt19937](http://www.cplusplus.com/reference/random/mt19937/)).
+The random seeds will be announced two weeks before the benchmark submission deadline.
+
+=== Benchmark detection is not allowed
+
+The framework and system should not detect and behave differently for
+benchmarks.
+
+=== Device Performance boost beyond out of the box configuration or non-standard testing environment are not allowed
+Devices should be tested under device’s default settings in a testing environment with ambient temperature. Any additional modification on the device or the environment should consult with the Mobile WG submitters and chairs. 
+
+=== Input-based optimization is not allowed
+
+The implementation should not encode any information about the content of the
+input dataset in any form.
+
+=== Replicability is mandatory
+
+Results that cannot be replicated are not valid results. Both inference and accuracy results should be within 5% with in 5 tries (with a 5 min wait in between).
+
+=== Audit Process
+All Closed/available submissions should make the device available for results replication by MLCommons.
+
+Submitters must provide the device either as a gift/loan or reimburse MLCommons for the purchase of the test system.
+
+== Scenarios
+
+In order to enable representative testing of a wide variety of inference
+platforms and use cases, MLPerf has defined four different scenarios as
+described in the table below. The number of queries is selected to ensure sufficient statistical confidence in the reported metric.
+
+=== Performance run
+|===
+|Scenario |Query Generation |Performance Sample Count |Min Samples to be tested |Min Duration |Tail Latency | Performance Metric
+|MobileNetEdge - Single stream |LoadGen sends next query as soon as SUT completes the previous query | 1024 |1024 |60 sec |90% | 90%-ile measured latency
+
+|MobileNetEdge - Offline |LoadGen sends all queries to the SUT at start | 1024 | 24,576 |None |N/A | Measured throughput
+|MobileDet-SSD - Single stream |LoadGen sends next query as soon as SUT completes the previous query | 256 |1024 |60 sec |90% | 90%-ile measured latency
+|DeepLab v3 - Single stream |LoadGen sends next query as soon as SUT completes the previous query | 256 |1024 |60 sec |90% | 90%-ile measured latency
+|MobileBERT - Single stream |LoadGen sends next query as soon as SUT completes the previous query | 10833 |1024 |60 sec |90% | 90%-ile measured latency
+|===
+
+=== Accuracy run
+
+|===
+|Model/Scenario |Accuracy Dataset |URL
+|MobileNetEdge - Single stream |ImageNet 2012 validation data set (50000 images) | http://image-net.org/challenges/LSVRC/2012/
+|MobileNetEdge - Offline |ImageNet 2012 validation data set (50000 images) | http://image-net.org/challenges/LSVRC/2012/
+|MobileDet-SSD - Single stream |MS-COCO 2017 validation set (5000 images) | http://images.cocodataset.org/zips/val2017.zip
+|DeepLab v3 - Single stream |ADE20K val set (2000 images) | http://data.csail.mit.edu/places/ADEchallenge/ADEChallengeData2016.zip
+|MobileBERT - Single stream |SQUAD v1.1 Dev (dev-v1.1.json) (10833 samples)  * Mini-validation set with 100 samples is adopted by MWG | https://github.com/google-research/bert#squad-11
+|===
+== Benchmarks
+
+The MLPerf organization provides a reference implementation of each benchmark,
+which includes the following elements: Code that implements the model in a
+framework.  A plain text “README.md” file that describes:
+
+* Problem
+
+** Dataset/Environment
+
+** Publication/Attribution
+
+** Data pre- and post-processing
+
+** Performance, accuracy, and calibration data sets
+
+** Test data traversal order (CHECK)
+
+* Model
+
+** Publication/Attribution
+
+** List of layers
+
+** Weights and biases
+
+* Quality and latency
+
+** Quality target
+
+** Latency target(s)
+
+* Directions
+
+** Steps to configure machine
+
+** Steps to download and verify data
+
+** Steps to run and time
+
+A “download_dataset” script that downloads the accuracy, speed, and calibration
+datasets.
+
+A “verify_dataset” script that verifies the dataset against the checksum.
+
+A “run_and_time” script that executes the benchmark and reports the wall-clock
+time.
+
+
+== Load Generator
+
+=== LoadGen Operation
+
+The LoadGen is provided in C++ with Python bindings and must be used by all
+submissions. The LoadGen is responsible for:
+
+* Generating the queries according to one of the scenarios.
+
+* Tracking the latency of queries.
+
+* Validating the accuracy of the results.
+
+* Computing final metrics.
+
+Latency is defined as the time from when the LoadGen was scheduled to pass a
+query to the SUT, to the time it receives a reply.
+
+* Single-stream: LoadGen measures average latency using a single test run. For
+the test run, LoadGen sends an initial query then continually sends the next
+query as soon as the previous query is processed.
+
+
+* Offline: LoadGen measures throughput using a single test run. For the test
+run, LoadGen sends all queries at once.
+
+The run procedure is as follows:
+
+1. LoadGen signals system under test (SUT).
+
+2. SUT starts up and signals readiness.
+
+3. LoadGen starts clock and begins generating queries.
+
+4. LoadGen stops generating queries as soon as the benchmark-specific minimum
+number of queries have been generated and the benchmark specific minimum time
+has elapsed.
+
+5. LoadGen waits for all queries to complete, and errors if all queries fail to
+complete.
+
+6. LoadGen computes metrics for the run.
+
+The execution of LoadGen is restricted as follows:
+
+* LoadGen must run on the processor that most faithfully simulates queries
+  arriving from the most logical source, which is usually the network or an I/O
+  device such as a camera. For example, if the most logical source is the
+  network and the system is characterized as host - accelerator, then LoadGen
+  should run on the host unless the accelerator incorporates a NIC.
+
+* The trace generated by LoadGen must be stored in the DRAM that most faithfully simulates queries arriving 
+  from the most logical source, which is usually the network or an I/O device such as a camera. It may be pinned.
+
+  Submitters seeking to use anything other than the DRAM attached to the processor on which loadgen is running must 
+  seek prior approval, and must provide with their submission sufficient details system architecture and software to  
+  show how the input activation bandwidth utilized by each benchmark/scenario combination can be delivered from the 
+  network or I/O device to that memory
+
+* Caching of any queries, any query parameters, or any intermediate results is
+  prohibited.
+
+* The LoadGen must be compiled from a tagged approved revision of the mlperf/inference
+  GitHub repository without alteration.  Pull requests addressing portability
+  issues and adding new functionality are welcome.
+
+LoadGen generates queries based on trace. The trace is constructed by uniformly
+sampling (with replacement) from a library based on a fixed random seed and
+deterministic generator. The size of the library is listed in as 'QSL Size' in
+the 'Benchmarks' table above. The trace is usually pre-generated, but may
+optionally be incrementally generated if it does not fit in memory. LoadGen
+validates accuracy via a separate test run that use each sample in the test
+library exactly once but is otherwise identical to the above normal metric run.
+
+One LoadGen validation run is required for each submitted performance result 
+even if two or more performance results share the same source code.
+
+Note: The same code must be run for both the accuracy and performance LoadGen modes. This means the same output should be passed in QuerySampleComplete in both modes. 
+
+== Divisions
+
+There are two divisions of the benchmark suite, the Closed division and the Open
+division.
+
+=== Closed Division
+
+The Closed division requires using pre-processing, post-processing, and model
+that is equivalent to the reference or alternative implementation.  The closed
+division allows calibration for quantization and does not allow any retraining.
+
+The unqualified name “MLPerf” must be used when referring to a Closed Division
+suite result, e.g. “a MLPerf result of 4.5.”
+
+=== Open Division
+
+The Open division allows using arbitrary pre- or post-processing and model,
+including retraining.  The qualified name “MLPerf Open” must be used when
+referring to an Open Division suite result, e.g. “a MLPerf Open result of 7.2.”
+
+
+== Data Sets
+
+For each benchmark, MLPerf will provide pointers to:
+
+* An accuracy data set, to be used to determine whether a submission meets the
+  quality target, and used as a validation set
+
+* A speed/performance data set that is a subset of the accuracy data set to be
+  used to measure performance
+
+For each benchmark, MLPerf will provide pointers to:
+
+* A calibration data set, to be used for quantization (see quantization
+  section), that is a small subset of the training data set used to generate the
+  weights
+
+Each reference implementation shall include a script to verify the datasets
+using a checksum. The dataset must be unchanged at the start of each run.
+
+=== Pre- and post-processing
+
+As input, before preprocessing:
+
+* all imaging benchmarks take uncropped uncompressed bitmap
+
+* BERT takes text
+
+
+Sample-independent pre-processing that matches the reference model is
+untimed. However, it must be pre-approved and added to the following list:
+
+* May resize to processed size 
+
+* May reorder channels / do arbitrary transpositions
+
+* May pad to arbitrary size (don’t be creative)
+
+* May do a single, consistent crop
+
+* Mean subtraction and normalization provided reference model expect those to be
+  done
+
+* May convert data among numerical formats
+
+Any other pre- and post-processing time is included in the wall-clock time for a
+run result.
+
+=== Test Data Traversal Order
+
+Test data is determined by the LoadGen. For scenarios where processing multiple
+samples can occur, any ordering is
+allowed subject to latency requirements.
+
+== Model
+
+CLOSED: MLPerf provides a reference implementation of each benchmark. The benchmark implementation must use a model that is
+equivalent, as defined in these rules, to the model used in the reference implementation.
+
+OPEN: The benchmark implementation may use a different model to perform the same
+task. Retraining is allowed.
+
+=== Weight Definition and Quantization
+
+CLOSED: MLPerf will provide trained weights and biases in fp32 format for both
+the reference and alternative implementations.
+
+MLPerf will provide a calibration data set for all models except
+GNMT. Submitters may do arbitrary purely mathematical, reproducible quantization
+using only the calibration data and weight and bias tensors from the benchmark
+owner provided model to any numerical format
+that achieves the desired quality. The quantization method must be publicly
+described at a level where it could be reproduced.
+
+To be considered principled, the description of the quantization method must be
+much much smaller than the non-zero weights it produces.
+
+Calibration is allowed and must only use the calibration data set provided by
+the benchmark owner. Submitters may choose to use only a subset of the calibration data set.
+
+Additionally, for image classification using MobileNetEdge and object
+detection using MobileDet-SSD, MLPerf will provide a retrained INT8
+(asymmetric for TFLite) model. Model weights and
+input activations are scaled per tensor, and must preserve the same shape modulo
+padding. Convolution layers are allowed to be in either NCHW or NHWC format.  No
+other retraining is allowed.
+
+OPEN: Weights and biases must be initialized to the same values for each run,
+any quantization scheme is allowed that achieves the desired quality.
+
+=== Model Equivalence
+
+All implementations are allowed as long as the latency and accuracy bounds are
+met and the reference weights are used. Reference weights may be modified
+according to the quantization rules.
+
+Examples of allowed techniques include, but are not limited to:
+
+* Arbitrary frameworks and runtimes: TensorFlow, TensorFlow-lite, ONNX, PyTorch,
+  etc, provided they conform to the rest of the rules
+
+* Running any given control flow or operations on or off an accelerator
+
+* Arbitrary data arrangement
+
+* Different in-memory representations of inputs, weights, activations, and outputs
+
+* Variation in matrix-multiplication or convolution algorithm provided the
+  algorithm produces asymptotically accurate results when evaluated with
+  asymptotic precision
+
+* Mathematically equivalent transformations (e.g. Tanh versus Logistic, ReluX
+  versus ReluY, any linear transformation of an activation function)
+
+* Approximations (e.g. replacing a transcendental function with a polynomial)
+
+* Processing queries out-of-order within discretion provided by scenario
+
+* Replacing dense operations with mathematically equivalent sparse operations
+
+* Hand picking different numerical precisions for different operations
+
+* Fusing or unfusing operations
+
+* Dynamically switching between one or more batch sizes
+
+* Different implementations based on scenario (e.g., single stream vs. offline) or dynamically determined batch size or input size
+
+* Mixture of experts combining differently quantized weights
+
+* Stochastic quantization algorithms with seeds for reproducibility
+
+* Reducing ImageNet classifiers with 1001 classes to 1000 classes
+
+* Dead code elimination
+
+* Sorting samples in a query when it improves performance even when
+  all samples are distinct
+
+* Incorporating explicit statistical information about the calibration set
+  (eg. min, max, mean, distribution)
+
+* Empirical performance and accuracy tuning based on the performance and accuracy
+  set (eg. selecting batch sizes or numerics experimentally)
+  
+* Sorting an embedding table based on frequency of access in the training set.
+  (Submtters should include in their submission details of how the ordering was
+  derived.)
+
+The following techniques are disallowed:
+
+* Wholesale weight replacement or supplements
+
+* Discarding non-zero weight elements, including pruning
+
+* Caching queries or responses
+
+* Coalescing identical queries
+
+* Modifying weights during the timed portion of an inference run (no online
+  learning or related techniques)
+
+* Weight quantization algorithms that are similar in size to the non-zero
+  weights they produce
+
+* Hard coding the total number of queries
+
+* Techniques that boost performance for fixed length experiments but are
+  inapplicable to long-running services except in the offline scenario
+
+* Using knowledge of the LoadGen implementation to predict upcoming lulls or
+  spikes in the server scenario
+  
+* Treating beams in a beam search differently. For example, employing different
+  precision for different beams
+
+* Changing the number of beams per beam search relative to the reference
+
+* Incorporating explicit statistical information about the performance or
+  accuracy sets (eg. min, max, mean, distribution)
+
+* Techniques that take advantage of upsampled images. For example,
+  downsampling inputs and kernels for the first convolution.
+
+* Techniques that only improve performance when there are identical
+  samples in a query. For example, sorting samples in SSD.
+
+== Submission
+The submission process defines how to submit code and results for review and eventual publication. This section will also cover on-cycle regular submissions and off-cycle provisional submissions.
+
+=== Registration
+In order to register, a submitter or their org must sign the relevant MLCommon CLA and provide primary and secondary github handles and primary and secondary POC email address.
+
+=== Github repo
+MLPerf will provide a private Github repository for submissions. Each submitter will submit one or more pull requests containing their submission to the appropriate Github repo before the submission deadline. Pull requests may be amended up until the deadline.
+
+=== Licensing
+All submissions of code (preprocessing, post-processing, fork of the app and submitter’s backend glue code) must be made under the MLC CLA, All submissions of code will be Apache 2 compatible. Third party libraries need not be Apache 2 licensed.
+
+=== Producing Submission Results
+* Submitter will compile the mlperf apk with submitter’s own backend and run the app on the device of submitter’s own choosing for generating the inference and accuracy results
+* A submission must contain the content described in Vendor Submission Deliverables in https://docs.google.com/document/d/1XfPuLWkfpMc1MOC63ZbgF2_LoGgT4znxcucj3AXtwYI/edit#heading=h.dtpk1rfooece
+
+=== Submission content
+* Get commercial device
+* Generate inference performance results on commercially available device
+
+* Generate accuracy results on same commercially available device
+Specification of the device in JSON format
+** The necessary fields are at https://docs.google.com/spreadsheets/d/15CcIdlfaW9D5pty7XeyP8yTHEZYzS9Rnjb3D2c88L_8/edit#gid=520586570
+
+* Push code to private vendor repo, if needed:
+** Fork of mobile_app containing
+*** Build instructions for integration with vendor SDK
+*** Backend SDK glue code
+*** Per model runtime config options
+*** Pre-processing, post-processing code
+*** Additional changes beside vendor’s proprietary SDK
+* Along with submission, check-in writeup to describe quantization methodology
+** See example write-up here
+** See official intel submission example
+** See official nvidia submission v0.5 example
+* Fill out the submission checklist and submit as part of submission
+* Email the submission results before submission deadline 1pm PST
+** Make copy of submission results template
+** Enter your submission scores
+*** Precision / 2 decimal places
+** Fill it out
+*** Email to David Kanter <david@mlcommons.org> and vj@eecs.harvard.edu
+*** Subject: [ MLPerf Mobile Submission ] <Vendor> 
+** Attach submission results as Excel spreadsheet
+** Add checklist
+** Send!
+* Push the submission entry (see below) to GitHub
+* Send submission device with submission code to David Kanter
+
+=== Directory structure
+A submission is for one code base for the benchmarks submitted. An org may make multiple submissions. A submission should take the form of a directory with the following structure. The structure must be followed regardless of the actual location of the actual code, e.g. in the MLPerf repo or an external code host site.
+
+=== Inference
+within closed or open category folder:
+
+* <submitting_organization>/
+** Calibration.md (Quantization writeup)
+** systems/
+<system_desc_id>.json # combines hardware and software stack information
+** code/
+*** <Custom Model> (if the models are not deterministically generated)
+*** <Benchmark>
+**** TF/TFlite model files
+**** Calibration_process.adoc 
+*** <Runtime>/
+**** <git commit from the private submitter repo> 
+**** (For SS’ private SDK) <git commit ID for the version of the SDK used for submission> 
+
+
+** measurements/
+*** <system_desc_id>/
+**** <benchmark>/
+***** <scenario>
+****** <system_desc_id>_<runtime>_<scenario>.json (example here)
+
+** results/
+*** <system_desc_id>/
+**** result.json
+**** screenshots of the inference and accuracy results
+**** <benchmark>/
+***** <scenario>
+****** mlperf_log_detail.txt  <=from performance run
+****** mlperf_log_summary.txt  <= from performance run
+****** mlperf_log_trace.json <= from performance run
+****** <accuracy>
+******* mlperf_log_detail.txt  
+******* mlperf_log_summary.txt 
+******* mlperf_log_trace.json 
+******* mlperf_log_accuracy.json
+
+System names and implementation names may be arbitrary.
+<**benchmark**> must be one of {**mobilenetEdgeTPU, mobiledetSSD, deeplabV3+, mobileBERT**}. 
+<**scenario**> must be one of { **SingleStream, Offline**}.
+Here is the list of mandatory files for all submissions in any division/category. However, your submission should still include all software information and related information for results replication.
+
+* mlperf_log_accuracy.json (only from the accuracy run)
+* mlperf_log_detail.txt (from both performance and accuracy runs)
+* mlperf_log_summary.txt (from both performance and accuracy runs)
+* mlperf_log_trace.json (from both performance and accuracy runs)
+* (if the original MLPerf models are not used) calibration or weight transformation related code 
+* ( if the models are not deterministically generated) actual models
+Vendor’s glue code which interfaces with Mlperf app frontend 
+
+* <system_desc_id>_<implementation_id>_<scenario>.json
+
+* <system_desc_id>.json
+
+=== <system_desc_id>.json metadata
+The file <system_desc_id>.json should contain the following metadata describing the system:
+https://docs.google.com/spreadsheets/d/15CcIdlfaW9D5pty7XeyP8yTHEZYzS9Rnjb3D2c88L_8/edit#gid=520586570
+
+=== Logging requirements
+For Inference, the results logs must have been produced by the mlperf app. 
+
+=== Source code requirements for replication
+The following section applies to all submissions in all divisions.
+The source code must be sufficient to reproduce the results of the submission, given all source components specified. Any software component that would be required to substantially reproduce the submission must be uniquely identified using one of the following methods:
+
+|===
+|Software Component |Possible methods for replication |Considered “Available” for Category purposes (see later section)
+|Source code or binary included in the submission repo |--- |Yes
+|	Depends only on public Github repo	|	Commit hash or tag	|	Yes
+|	Depends only on public Github repo plus one or more PRs	|	Commit hash or tag, and PR number(s)	|	Yes
+|	Depends only on an available binary (could be free to download or for purchase / customers only)	|	Name and version, or url	|	Yes, if the binary is a Beta or Production release
+|	Depends on private source code from an internal source control system	|	Unique source identifier [i.e., gitlab hash, p4 CL, etc]	|	No
+|	Private binary	|	Checksum	|	No
+
+|===
+
+=== Source code requirements for inference inspection
+The following section applies to all submissions in the Closed division. 
+For inference, the source code, pseudo-code, or prose description must be sufficient to determine:
+
+* The connection to the loadgen
+* Preprocessing & Post Processing
+* The architecture of the model, and the operations performed
+* Weights (please notify results chair if > 2 GB combined)
+* Weight transformations
+** If weight transformations are non-deterministic, then any randomness seeds used must be included in the submission.
+
+=== Provisional Submissions
+
+Provisional submissions are designed to allow submitting, publishing, and using MLPerf results outside of the regular submission schedule.
+Provisional submissions have the same divisions and follow the same procedures as an available submission, except that the system is provided to MLCommons within 4 weeks after the result is published and the review and audit process occurs no later than the next regularly scheduled review and audit. If the provisional submission cannot be verified during the review and audit: TBD by WG
+
+
+
+== Review
+
+=== Visibility of results and code during review
+During the review process, only certain groups are allowed to inspect results and code.
+
+|===
+|	Group	|	Can Inspect
+|	Review committee	|	All results, all code
+|	Submitters	|	All results, all code
+|	Public	|	No results, no code
+
+|===
+
+=== Filing objections
+Submitters must officially file objections to other submitter’s code by creating a GitHub issue prior to the “Filing objections” deadline that cites the offending lines, the rules section violated, and, if pertinent, corresponding lines of the reference implementation that are not equivalent.
+Each submitter must file objections with a “by <org>” tag and a “against <org>” tag. Multiple organizations may append their “by <org>” to an existing objection if desired. If an objector comes to believe the objection is in error they may remove their “by <org>” tag. All objections with no “by <org>” tags at the end of the filing deadline will be closed.
+Submitters should file an objection, then discuss with the submitter to verify if the objection is correct. Following filing of an issue but before resolution, both objecting submitter and owning submitter may add comments to help the review committee understand the problem.
+If the owning submitter acknowledges the problem, they may append the “fix_required” tag and begin to fix the issue.
+
+=== Resolving objections
+The review committee will review each objection, and either establish consensus or vote. If the committee votes to support an objection, it will provide some basic guidance on an acceptable fix and append the “fix_required” tag. If the committee votes against an objection, it will close the issue.
+
+=== Fixing objections
+Code should be updated via a pull request prior to the “fixing objections” deadline. Following submission of all fixes, the objecting submitter should confirm that the objection has been addressed with the objector(s) and ask them to remove their “by <org> tags.
+If the objector is not satisfied by the fix, then the review committee will decide the issue at its final review meeting. The review committee may vote to accept a fix and close the issue, or reject a fix and request the submission be moved to open or withdrawn.
+
+=== Withdrawing results or changing division
+Anytime up until the final human readable deadline, an entry may be withdrawn by amending the pull request. Alternatively, an entry may be voluntarily moved from the closed division to the open division.
+
+
