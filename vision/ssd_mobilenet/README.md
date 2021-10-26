@@ -1,6 +1,6 @@
 # Mobilenet v2 SSD with Coco 
 
-This directory contains the Mobilenet v2 SSD object detetion models used for MLPerf. The following instrcutions are from https://github.com/mlperf/mobile_app/blob/model_repo_v0.7/tflite/README.md:
+This directory contains the Mobilenet v2 SSD object detetion models used for MLPerf. The following instrcutions are from https://github.com/mlcommons/mobile_models/tree/main/v0_7/tflite:
 
 1.  ssd_mobilenet_v2_300_float
 
@@ -65,8 +65,9 @@ This directory contains the Mobilenet v2 SSD object detetion models used for MLP
 Required accuracy to submit: 93% of FP32 TF model (above 0.227)
 
 ### Steps for evaluating accuracy on device
-Follow instructions to build mlperf mobile app from vendor submission repo(s) and install on android device.
-Download and prepare COCO dataset per instructions at https://github.com/mlcommons/mobile_app/blob/master/cpp/datasets/README.md.
-Copy COCO validation set (complete dataset) to /sdcard/mlperf_datasets/coco/img/ and ground truth file (coco_val.pbtxt) to /sdcard/mlperf_datasets/coco/ (e.g., via adb)
-Open mlperf mobile app on device and test detection benchmark. All validation images available at /sdcard/mlperf_datasets/coco/img/
-Note: the evaluation script is at https://github.com/mlcommons/mobile_app/cpp/datasets/coco.cc
+* Follow instructions to build mlperf mobile app from vendor submission repo(s) and install on android device.  
+* Download and prepare COCO dataset per instructions at https://github.com/mlcommons/mobile_app_open/blob/master/android/cpp/datasets/README.md  
+* Copy COCO validation set (complete dataset) to /sdcard/mlperf_datasets/coco/img/ and ground truth file (coco_val.pbtxt) to /sdcard/mlperf_datasets/coco/ (e.g., via adb)  
+* Open mlperf mobile app on device and test detection benchmark. All validation images available at /sdcard/mlperf_datasets/coco/img/  
+
+Note: the evaluation script is at https://github.com/mlcommons/mobile_app_open/blob/master/android/cpp/datasets/coco.cc

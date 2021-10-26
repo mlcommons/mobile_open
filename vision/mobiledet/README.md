@@ -67,5 +67,5 @@ The frozen graph models generated via `export_inference_graph.py` have 0.285 and
 1. Follow instructions to build MLPerf mobile app from vendor submission repo(s) and install on android device.
 2. Download and unzip the COCO 2017 validation set from http://images.cocodataset.org/zips/val2017.zip
 3. Copy the images to /sdcard/mlperf_datasets/coco/img/ (e.g., using adb).
-4. Open mlperf mobile app on device and test detection benchmark. Note: the evaluation script is at "https://github.com/mlcommons/mobile_app/blob/master/cpp/datasets/coco.cc". Also the normalized ground truth file is already part of the app at "https://github.com/mlcommons/mobile_app/blob/master/java/org/mlperf/inference/assets/coco_val.pbtxt" .
+4. Open mlperf mobile app on device and test detection benchmark. Note: the evaluation script is at "https://github.com/mlcommons/mobile_app_open/blob/master/android/cpp/datasets/coco.cc". Also the normalized ground truth file is already part of the app at "https://github.com/mlcommons/mobile_models/blob/main/v1_0/assets/coco_val_full.pbtxt".
 

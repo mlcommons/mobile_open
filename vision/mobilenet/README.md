@@ -13,12 +13,12 @@
 
 ### Steps for evaluating accuracy on device
 
-1. Follow instructions to build and install mlperf mobile app from commit c8075 on android device
-               https://github.com/mlcommons/mobile_app/tree/c8075ac367554cae98b1508c4a5ab14d14c5885c
+1. Follow instructions to build and install mlperf mobile app on android device
+               https://github.com/mlcommons/mobile_app_open/tree/master/android
 2. Download imagenet per instructions at 
-               https://github.com/mlcommons/mobile_app/tree/c8075ac367554cae98b1508c4a5ab14d14c5885c/cpp/datasets
-3. Copy imagenet validation set and ground truth file to /sdcard/img_val (e.g., via adb)
-4. Open mlperf mobile app on device and test classification benchmark. All images available at /sdcard/img_val 
+               https://github.com/mlcommons/mobile_app_open/blob/master/android/cpp/datasets/README.md
+3. Copy imagenet validation set and ground truth file to device (e.g., via adb)
+4. Open mlperf mobile app on device and test classification benchmark.
 
-Note: the evaluation script is at https://github.com/mlcommons/mobile_app/blob/c8075ac367554cae98b1508c4a5ab14d14c5885c/cpp/datasets/imagenet.cc .
+Note: the evaluation script is at https://github.com/mlcommons/mobile_app_open/blob/master/android/cpp/datasets/imagenet.cc.
 
