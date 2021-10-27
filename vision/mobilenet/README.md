@@ -14,7 +14,7 @@
 ### Steps for evaluating accuracy on device
 
 1. Follow instructions to build and install mlperf mobile app on android device
-               https://github.com/mlcommons/mobile_app_open/tree/master/android
+               https://github.com/mlcommons/mobile_app_open/blob/master/android/README.md
 2. Download imagenet per instructions at 
                https://github.com/mlcommons/mobile_app_open/blob/master/android/cpp/datasets/README.md
 3. Copy imagenet validation set and ground truth file to device (e.g., via adb)
