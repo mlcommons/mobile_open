@@ -1,5 +1,5 @@
 # how to generate the dataset:
-as said in https://github.com/mlperf/mobile_app/tree/master/cpp/datasets, we can use
+as said in https://github.com/mlcommons/mobile_app_open/blob/master/android/cpp/datasets/README.md, we can use
 a simple Python script to generate 512x512 images and ground truth files using DeepLab
 preprocessing parts.
 
