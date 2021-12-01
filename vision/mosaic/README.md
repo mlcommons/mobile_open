@@ -17,3 +17,6 @@ or lower latency compared to the current industry standard MLPerf v1.0 models an
 |MNV3-Small + LR-ASPP | 52.57% | 0.6 | 99.7 (CPU) / 67.1 (GPU) / 71.3 (DSP) / 66.2 (EdgeTPU) |
 |MNV3-Large + LR-ASPP | 55.36% | 1.43 | 176.1 (CPU) / 63.7 (GPU) / 135 (DSP) / 118.8 (EdgeTPU) |
 |MOSAIC | 60.10% | 2.98 | 116 (CPU) / 107 (GPU) / 39 (DSP) / 56.6 (EdgeTPU) |
+
+We follow the same protocol of MLPerf v1.0 by training and evaluating with the top-31 classes instead of the original 150 classes.
+A single-scale input with resolution of 512x512 is used in our evaluation. Our results are compared with other top mobile segmenters including the MLPerf v1.0 standard model, showing a substantial improvement and better trade-offs between accuracy and latency. Notably, MOSAIC achieves 5\% absolute gain in mIOU while keeping the on-device latency low especially on Pixel 4 DSP and EdgeTPU.
