@@ -149,12 +149,12 @@ described in the table below. The number of queries is selected to ensure suffic
 === Accuracy run
 
 |===
-|Model/Scenario |Accuracy Dataset |URL
-|MobileNetEdge - Single stream |ImageNet 2012 validation data set (50000 images) | http://image-net.org/challenges/LSVRC/2012/
-|MobileNetEdge - Offline |ImageNet 2012 validation data set (50000 images) | http://image-net.org/challenges/LSVRC/2012/
-|MobileDet-SSD - Single stream |MS-COCO 2017 validation set (5000 images) | http://images.cocodataset.org/zips/val2017.zip
-|DeepLab v3 - Single stream |ADE20K val set (2000 images) | http://data.csail.mit.edu/places/ADEchallenge/ADEChallengeData2016.zip
-|MobileBERT - Single stream |SQUAD v1.1 Dev (dev-v1.1.json) (10833 samples)  * Mini-validation set with 100 samples is adopted by MWG | https://github.com/google-research/bert#squad-11
+|Model/Scenario |Accuracy Dataset |URL | Accuracy Target
+|MobileNetEdge - Single stream |ImageNet 2012 validation data set (50000 images) | http://image-net.org/challenges/LSVRC/2012/ | 98% of FP32 (76.19%)
+|MobileNetEdge - Offline |ImageNet 2012 validation data set (50000 images) | http://image-net.org/challenges/LSVRC/2012/ | 98% of FP32 (76.19%)
+|MobileDet-SSD - Single stream |MS-COCO 2017 validation set (5000 images) | http://images.cocodataset.org/zips/val2017.zip | 95% of FP32 (mAP 0.285)
+|DeepLab v3 - Single stream |ADE20K val set (2000 images) | http://data.csail.mit.edu/places/ADEchallenge/ADEChallengeData2016.zip | 97% of FP32 (mIOU 54.8% 32 classes)
+|MobileBERT - Single stream |SQUAD v1.1 Dev (dev-v1.1.json) (10833 samples)  * Mini-validation set with 100 samples is adopted by MWG | https://github.com/google-research/bert#squad-11 | 93% of FP32 (90.5 F1 for first 100 sentences; 89.4 F1 score for full validation set)
 |===
 == Benchmarks
 
@@ -633,8 +633,13 @@ For inference, the source code, pseudo-code, or prose description must be suffic
 
 === Provisional Submissions
 
-Provisional submissions are designed to allow submitting, publishing, and using MLPerf results outside of the regular submission schedule.
-Provisional submissions have the same divisions and follow the same procedures as an available submission, except that the system is provided to MLCommons within 4 weeks after the result is published and the review and audit process occurs no later than the next regularly scheduled review and audit. If the provisional submission cannot be verified during the review and audit: TBD by WG
+Provisional submissions are designed to allow submission, publication, and use of official MLPerf Mobile official results outside of the regular submission schedule. Most importantly, a provisional submission is required to pre-integrate submitter backends into the official app. Provisional submissions require the submitter to have completed an on-cycle submission within the past year and participate in the weekly engineering meetings, or must be approved by the MLCommons executive director and WG chairs. Provisional submissions may only be submitted on the latest official version.
+
+Submitters will notify the MLCommons executive director at least 4 weeks prior to submission, and MLCommons will create a private repo for the provisional submission. The private repository will be visible to only MLCommons and WG members. The submitter will then upload the content of their submission to the agreed upon submission repo, the content of which will be identical to that of an official submission. The Mobile WG will inspect the code at its discretion, and ask the submitter to make changes if needed. 
+
+MLCommons will then integrate the vendor backend into the app, and distribute a version of the app to members for testing and sign-off for release by members. The vendor backends of other members will be the latest version from mobile_app_open, granted that the backend owner has submitted within the past year, and is actively participating in engineering meetings.
+
+The device will undergo audit by a designated auditor and WG members for up to five weeks or sign-off from other WG members, whichever comes first. Once the device passes the audit from the designated auditor, at the submitter’s request, the result is added to the results board for the given version of the app, and the official app will be made publicly available. The app version and date used to derive the results will be noted within the result details.
 
 
 
