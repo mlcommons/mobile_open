@@ -1,4 +1,4 @@
-= MLPerf Mobile v1.1 Submission Process and Auditing Protocols
+= MLPerf Mobile v2.0 Submission Process and Auditing Protocols
 
 
 == MLPerf Mobile WG
