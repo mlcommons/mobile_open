@@ -139,10 +139,10 @@ described in the table below. The number of queries is selected to ensure suffic
 |===
 |Scenario |Query Generation |Performance Sample Count |Min Samples to be tested |Min Duration |Tail Latency | Performance Metric
 |MobileNetEdge - Single stream |LoadGen sends next query as soon as SUT completes the previous query | 1024 |1024 |60 sec |90% | 90%-ile measured latency
-
 |MobileNetEdge - Offline |LoadGen sends all queries to the SUT at start | 1024 | 24,576 |None |N/A | Measured throughput
 |MobileDet-SSD - Single stream |LoadGen sends next query as soon as SUT completes the previous query | 256 |1024 |60 sec |90% | 90%-ile measured latency
-|DeepLab v3 - Single stream |LoadGen sends next query as soon as SUT completes the previous query | 256 |1024 |60 sec |90% | 90%-ile measured latency
+|MOSAIC - Single stream |LoadGen sends next query as soon as SUT completes the previous query | 256 |1024 |60 sec |90% | 90%-ile measured latency
+|DeepLab v3 (to be deprecated by v2.1) - Single stream |LoadGen sends next query as soon as SUT completes the previous query | 256 |1024 |60 sec |90% | 90%-ile measured latency
 |MobileBERT - Single stream |LoadGen sends next query as soon as SUT completes the previous query | 10833 |1024 |60 sec |90% | 90%-ile measured latency
 |===
 
@@ -153,7 +153,8 @@ described in the table below. The number of queries is selected to ensure suffic
 |MobileNetEdge - Single stream |ImageNet 2012 validation data set (50000 images) | http://image-net.org/challenges/LSVRC/2012/ | 98% of FP32 (76.19%)
 |MobileNetEdge - Offline |ImageNet 2012 validation data set (50000 images) | http://image-net.org/challenges/LSVRC/2012/ | 98% of FP32 (76.19%)
 |MobileDet-SSD - Single stream |MS-COCO 2017 validation set (5000 images) | http://images.cocodataset.org/zips/val2017.zip | 95% of FP32 (mAP 0.285)
-|DeepLab v3 - Single stream |ADE20K val set (2000 images) | http://data.csail.mit.edu/places/ADEchallenge/ADEChallengeData2016.zip | 97% of FP32 (mIOU 54.8% 32 classes)
+|MOSAIC - Single stream |ADE20K val set (2000 images) | http://data.csail.mit.edu/places/ADEchallenge/ADEChallengeData2016.zip | 96% of FP32 (mIOU 59.75% 32 classes)
+|DeepLab v3 (to be deprecated by v2.1) - Single stream |ADE20K val set (2000 images) | http://data.csail.mit.edu/places/ADEchallenge/ADEChallengeData2016.zip | 97% of FP32 (mIOU 54.8% 32 classes)
 |MobileBERT - Single stream |SQUAD v1.1 Dev (dev-v1.1.json) (10833 samples)  * Mini-validation set with 100 samples is adopted by MWG | https://github.com/google-research/bert#squad-11 | 93% of FP32 (90.5 F1 for first 100 sentences; 89.4 F1 score for full validation set)
 |===
 == Benchmarks
@@ -270,6 +271,8 @@ The execution of LoadGen is restricted as follows:
 * The LoadGen must be compiled from a tagged approved revision of the mlperf/inference
   GitHub repository without alteration.  Pull requests addressing portability
   issues and adding new functionality are welcome.
+
+* The vendor can reduce the latency setting to be lower than 90000(default). However, the latency setting cannot be greater than 90000.
 
 LoadGen generates queries based on trace. The trace is constructed by uniformly
 sampling (with replacement) from a library based on a fixed random seed and
@@ -505,24 +508,23 @@ All submissions of code (preprocessing, post-processing, fork of the app and sub
 
 === Producing Submission Results
 * Submitter will compile the mlperf apk with submitter’s own backend and run the app on the device of submitter’s own choosing for generating the inference and accuracy results
-* A submission must contain the content described in Vendor Submission Deliverables in https://docs.google.com/document/d/1XfPuLWkfpMc1MOC63ZbgF2_LoGgT4znxcucj3AXtwYI/edit#heading=h.dtpk1rfooece
+* A submission must contain the content described in Vendor Submission Deliverables in the next section
 
 === Submission content
-* Get commercial device
-* Generate inference performance results on commercially available device
-
-* Generate accuracy results on same commercially available device
-Specification of the device in JSON format
+* Name of the commercial device
+* Inference performance results on commercially available device
+* Accuracy results on same commercially available device
+*Specification of the device in JSON format
 ** The necessary fields are at https://docs.google.com/spreadsheets/d/15CcIdlfaW9D5pty7XeyP8yTHEZYzS9Rnjb3D2c88L_8/edit#gid=520586570
 
-* Push code to private vendor repo, if needed:
+* Code changes to private vendor repo, if needed:
 ** Fork of mobile_app containing
 *** Build instructions for integration with vendor SDK
 *** Backend SDK glue code
 *** Per model runtime config options
 *** Pre-processing, post-processing code
 *** Additional changes beside vendor’s proprietary SDK
-* Along with submission, check-in writeup to describe quantization methodology
+* Writeup to describe quantization methodology (should have been done one week before the submission)
 ** See example write-up here
 ** See official intel submission example
 ** See official nvidia submission v0.5 example
@@ -531,14 +533,11 @@ Specification of the device in JSON format
 ** Make copy of submission results template
 ** Enter your submission scores
 *** Precision / 2 decimal places
-** Fill it out
-*** Email to David Kanter <david@mlcommons.org> and vj@eecs.harvard.edu
+** Email to MLPerf Mobile group chairs and cc. David Kanter <david@mlcommons.org> 
 *** Subject: [ MLPerf Mobile Submission ] <Vendor> 
 ** Attach submission results as Excel spreadsheet
 ** Add checklist
-** Send!
-* Push the submission entry (see below) to GitHub
-* Send submission device with submission code to David Kanter
+
 
 === Directory structure
 A submission is for one code base for the benchmarks submitted. An org may make multiple submissions. A submission should take the form of a directory with the following structure. The structure must be followed regardless of the actual location of the actual code, e.g. in the MLPerf repo or an external code host site.
@@ -672,4 +671,5 @@ If the objector is not satisfied by the fix, then the review committee will deci
 === Withdrawing results or changing division
 Anytime up until the final human readable deadline, an entry may be withdrawn by amending the pull request. Alternatively, an entry may be voluntarily moved from the closed division to the open division.
 
-
+=== Auditing process
+refers to https://github.com/mlcommons/mobile_open/blob/main/rules/submissionRuleV2_0.adoc#mlperf-mobile-v11-submission-process-and-auditing-protocols
