@@ -153,7 +153,7 @@ described in the table below. The number of queries is selected to ensure suffic
 |MobileNetEdge - Single stream |ImageNet 2012 validation data set (50000 images) | http://image-net.org/challenges/LSVRC/2012/ | 98% of FP32 (76.19%)
 |MobileNetEdge - Offline |ImageNet 2012 validation data set (50000 images) | http://image-net.org/challenges/LSVRC/2012/ | 98% of FP32 (76.19%)
 |MobileDet-SSD - Single stream |MS-COCO 2017 validation set (5000 images) | http://images.cocodataset.org/zips/val2017.zip | 95% of FP32 (mAP 0.285)
-|MOSAIC - Single stream |ADE20K val set (2000 images) | http://data.csail.mit.edu/places/ADEchallenge/ADEChallengeData2016.zip | 96% of FP32 (mIOU 59.75% 32 classes)
+|MOSAIC - Single stream |ADE20K val set (2000 images) | http://data.csail.mit.edu/places/ADEchallenge/ADEChallengeData2016.zip | 96% of FP32 (mIOU 59.8% 32 classes)
 |DeepLab v3 (to be deprecated by v2.1) - Single stream |ADE20K val set (2000 images) | http://data.csail.mit.edu/places/ADEchallenge/ADEChallengeData2016.zip | 97% of FP32 (mIOU 54.8% 32 classes)
 |MobileBERT - Single stream |SQUAD v1.1 Dev (dev-v1.1.json) (10833 samples)  * Mini-validation set with 100 samples is adopted by MWG | https://github.com/google-research/bert#squad-11 | 93% of FP32 (90.5 F1 for first 100 sentences; 89.4 F1 score for full validation set)
 |===
