@@ -118,7 +118,7 @@
 **** <device_id>.json
 *** calibration.md  # quantization writeup
 
-*<Benchmark name>* = {mobilenetEdgeTPU, mobiledetSSD, mobileBERT, deeplabV3+, mosaic} +
+*<Benchmark name>* = {mobilenetEdgeTPU, mobiledetSSD, mobileBERT, mosaic} +
 *<scenario>* = {SingleStream, Offline}
 
 === Post-Submission Review/Audit
