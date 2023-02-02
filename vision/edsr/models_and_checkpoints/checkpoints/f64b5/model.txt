@@ -1,0 +1,75 @@
+Model: "edsr"
+__________________________________________________________________________________________________
+ Layer (type)                   Output Shape         Param #     Connected to                     
+==================================================================================================
+ input_1 (InputLayer)           [(None, None, None,  0           []                               
+                                 3)]                                                              
+                                                                                                  
+ conv2d (Conv2D)                (None, None, None,   1792        ['input_1[0][0]']                
+                                64)                                                               
+                                                                                                  
+ conv2d_1 (Conv2D)              (None, None, None,   36928       ['conv2d[0][0]']                 
+                                64)                                                               
+                                                                                                  
+ conv2d_2 (Conv2D)              (None, None, None,   36928       ['conv2d_1[0][0]']               
+                                64)                                                               
+                                                                                                  
+ add (Add)                      (None, None, None,   0           ['conv2d[0][0]',                 
+                                64)                               'conv2d_2[0][0]']               
+                                                                                                  
+ conv2d_3 (Conv2D)              (None, None, None,   36928       ['add[0][0]']                    
+                                64)                                                               
+                                                                                                  
+ conv2d_4 (Conv2D)              (None, None, None,   36928       ['conv2d_3[0][0]']               
+                                64)                                                               
+                                                                                                  
+ add_1 (Add)                    (None, None, None,   0           ['add[0][0]',                    
+                                64)                               'conv2d_4[0][0]']               
+                                                                                                  
+ conv2d_5 (Conv2D)              (None, None, None,   36928       ['add_1[0][0]']                  
+                                64)                                                               
+                                                                                                  
+ conv2d_6 (Conv2D)              (None, None, None,   36928       ['conv2d_5[0][0]']               
+                                64)                                                               
+                                                                                                  
+ add_2 (Add)                    (None, None, None,   0           ['add_1[0][0]',                  
+                                64)                               'conv2d_6[0][0]']               
+                                                                                                  
+ conv2d_7 (Conv2D)              (None, None, None,   36928       ['add_2[0][0]']                  
+                                64)                                                               
+                                                                                                  
+ conv2d_8 (Conv2D)              (None, None, None,   36928       ['conv2d_7[0][0]']               
+                                64)                                                               
+                                                                                                  
+ add_3 (Add)                    (None, None, None,   0           ['add_2[0][0]',                  
+                                64)                               'conv2d_8[0][0]']               
+                                                                                                  
+ conv2d_9 (Conv2D)              (None, None, None,   36928       ['add_3[0][0]']                  
+                                64)                                                               
+                                                                                                  
+ conv2d_10 (Conv2D)             (None, None, None,   36928       ['conv2d_9[0][0]']               
+                                64)                                                               
+                                                                                                  
+ add_4 (Add)                    (None, None, None,   0           ['add_3[0][0]',                  
+                                64)                               'conv2d_10[0][0]']              
+                                                                                                  
+ conv2d_11 (Conv2D)             (None, None, None,   36928       ['add_4[0][0]']                  
+                                64)                                                               
+                                                                                                  
+ add_5 (Add)                    (None, None, None,   0           ['conv2d[0][0]',                 
+                                64)                               'conv2d_11[0][0]']              
+                                                                                                  
+ conv2d_1_scale_2 (Conv2D)      (None, None, None,   6924        ['add_5[0][0]']                  
+                                12)                                                               
+                                                                                                  
+ lambda (Lambda)                (None, None, None,   0           ['conv2d_1_scale_2[0][0]']       
+                                12)                                                               
+                                                                                                  
+ lambda_1 (Lambda)              (None, None, None,   0           ['lambda[0][0]']                 
+                                3)                                                                
+                                                                                                  
+==================================================================================================
+Total params: 414,924
+Trainable params: 414,924
+Non-trainable params: 0
+__________________________________________________________________________________________________
