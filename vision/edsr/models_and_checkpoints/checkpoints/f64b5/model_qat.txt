@@ -1,0 +1,78 @@
+Model: "edsr"
+__________________________________________________________________________________________________
+ Layer (type)                   Output Shape         Param #     Connected to                     
+==================================================================================================
+ input_1 (InputLayer)           [(None, None, None,  0           []                               
+                                 3)]                                                              
+                                                                                                  
+ quantize_layer (QuantizeLayer)  (None, None, None,   3          ['input_1[0][0]']                
+                                3)                                                                
+                                                                                                  
+ quant_conv2d (QuantizeWrapperV  (None, None, None,   1923       ['quantize_layer[1][0]']         
+ 2)                             64)                                                               
+                                                                                                  
+ quant_conv2d_1 (QuantizeWrappe  (None, None, None,   37059      ['quant_conv2d[0][0]']           
+ rV2)                           64)                                                               
+                                                                                                  
+ quant_conv2d_2 (QuantizeWrappe  (None, None, None,   37059      ['quant_conv2d_1[0][0]']         
+ rV2)                           64)                                                               
+                                                                                                  
+ quant_add (QuantizeWrapperV2)  (None, None, None,   3           ['quant_conv2d[0][0]',           
+                                64)                               'quant_conv2d_2[0][0]']         
+                                                                                                  
+ quant_conv2d_3 (QuantizeWrappe  (None, None, None,   37059      ['quant_add[0][0]']              
+ rV2)                           64)                                                               
+                                                                                                  
+ quant_conv2d_4 (QuantizeWrappe  (None, None, None,   37059      ['quant_conv2d_3[0][0]']         
+ rV2)                           64)                                                               
+                                                                                                  
+ quant_add_1 (QuantizeWrapperV2  (None, None, None,   3          ['quant_add[0][0]',              
+ )                              64)                               'quant_conv2d_4[0][0]']         
+                                                                                                  
+ quant_conv2d_5 (QuantizeWrappe  (None, None, None,   37059      ['quant_add_1[0][0]']            
+ rV2)                           64)                                                               
+                                                                                                  
+ quant_conv2d_6 (QuantizeWrappe  (None, None, None,   37059      ['quant_conv2d_5[0][0]']         
+ rV2)                           64)                                                               
+                                                                                                  
+ quant_add_2 (QuantizeWrapperV2  (None, None, None,   3          ['quant_add_1[0][0]',            
+ )                              64)                               'quant_conv2d_6[0][0]']         
+                                                                                                  
+ quant_conv2d_7 (QuantizeWrappe  (None, None, None,   37059      ['quant_add_2[0][0]']            
+ rV2)                           64)                                                               
+                                                                                                  
+ quant_conv2d_8 (QuantizeWrappe  (None, None, None,   37059      ['quant_conv2d_7[0][0]']         
+ rV2)                           64)                                                               
+                                                                                                  
+ quant_add_3 (QuantizeWrapperV2  (None, None, None,   3          ['quant_add_2[0][0]',            
+ )                              64)                               'quant_conv2d_8[0][0]']         
+                                                                                                  
+ quant_conv2d_9 (QuantizeWrappe  (None, None, None,   37059      ['quant_add_3[0][0]']            
+ rV2)                           64)                                                               
+                                                                                                  
+ quant_conv2d_10 (QuantizeWrapp  (None, None, None,   37059      ['quant_conv2d_9[0][0]']         
+ erV2)                          64)                                                               
+                                                                                                  
+ quant_add_4 (QuantizeWrapperV2  (None, None, None,   3          ['quant_add_3[0][0]',            
+ )                              64)                               'quant_conv2d_10[0][0]']        
+                                                                                                  
+ quant_conv2d_11 (QuantizeWrapp  (None, None, None,   37059      ['quant_add_4[0][0]']            
+ erV2)                          64)                                                               
+                                                                                                  
+ quant_add_5 (QuantizeWrapperV2  (None, None, None,   3          ['quant_conv2d[0][0]',           
+ )                              64)                               'quant_conv2d_11[0][0]']        
+                                                                                                  
+ quant_conv2d_1_scale_2 (Quanti  (None, None, None,   6951       ['quant_add_5[0][0]']            
+ zeWrapperV2)                   12)                                                               
+                                                                                                  
+ lambda (Lambda)                (None, None, None,   0           ['quant_conv2d_1_scale_2[0][0]'] 
+                                12)                                                               
+                                                                                                  
+ lambda_1 (Lambda)              (None, None, None,   0           ['lambda[1][0]']                 
+                                3)                                                                
+                                                                                                  
+==================================================================================================
+Total params: 416,544
+Trainable params: 414,924
+Non-trainable params: 1,620
+__________________________________________________________________________________________________
