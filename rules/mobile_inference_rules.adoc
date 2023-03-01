@@ -5,12 +5,12 @@
 
 = MLPerf Mobile Inference Rules
 
-Version 0.2
-Updated Aug 11, 2020
+Version 3.0
+Updated Feb 28, 2023
 This version has been updated, but is not yet final.
 
 Points of contact: David Kanter (david@mlcommons.org), William Chou
-(wchou@qti.qualcomm.com), Wookie Hong (jwookie.hong.partner@gmail.com), Ramesh Chukka (ramesh.n.chukka@intel.com)
+(wchou@qti.qualcomm.com), Manasa Kankanala (manasa.kankanala@intel.com), David Tafur (tafur@mlcommons.org)
 
 == Overview
 
@@ -142,7 +142,7 @@ described in the table below. The number of queries is selected to ensure suffic
 |MobileNetEdge - Offline |LoadGen sends all queries to the SUT at start | 1024 | 24,576 |None |N/A | Measured throughput
 |MobileDet-SSD - Single stream |LoadGen sends next query as soon as SUT completes the previous query | 256 |1024 |60 sec |90% | 90%-ile measured latency
 |MOSAIC - Single stream |LoadGen sends next query as soon as SUT completes the previous query | 256 |1024 |60 sec |90% | 90%-ile measured latency
-|DeepLab v3 (to be deprecated by v2.1) - Single stream |LoadGen sends next query as soon as SUT completes the previous query | 256 |1024 |60 sec |90% | 90%-ile measured latency
+|EDSR - Single stream |LoadGen sends next query as soon as SUT completes the previous query | 25 |25 |60 sec |90% | 90%-ile measured latency
 |MobileBERT - Single stream |LoadGen sends next query as soon as SUT completes the previous query | 10833 |1024 |60 sec |90% | 90%-ile measured latency
 |===
 
@@ -154,7 +154,7 @@ described in the table below. The number of queries is selected to ensure suffic
 |MobileNetEdge - Offline |ImageNet 2012 validation data set (50000 images) | http://image-net.org/challenges/LSVRC/2012/ | 98% of FP32 (76.19%)
 |MobileDet-SSD - Single stream |MS-COCO 2017 validation set (5000 images) | http://images.cocodataset.org/zips/val2017.zip | 95% of FP32 (mAP 0.285)
 |MOSAIC - Single stream |ADE20K val set (2000 images) | http://data.csail.mit.edu/places/ADEchallenge/ADEChallengeData2016.zip | 96% of FP32 (mIOU 59.8% 32 classes)
-|DeepLab v3 (to be deprecated by v2.1) - Single stream |ADE20K val set (2000 images) | http://data.csail.mit.edu/places/ADEchallenge/ADEChallengeData2016.zip | 97% of FP32 (mIOU 54.8% 32 classes)
+|EDSR - Single stream |Selected Google Open Image (25 images) | https://github.com/mlcommons/mobile_models/blob/main/v3_0/datasets/snusr_lr.zip | FP32: 33.58dB , Int8: 33dB
 |MobileBERT - Single stream |SQUAD v1.1 Dev (dev-v1.1.json) (10833 samples)  * Mini-validation set with 100 samples is adopted by MWG | https://github.com/google-research/bert#squad-11 | 93% of FP32 (90.5 F1 for first 100 sentences; 89.4 F1 score for full validation set)
 |===
 == Benchmarks
@@ -374,8 +374,7 @@ task. Retraining is allowed.
 CLOSED: MLPerf will provide trained weights and biases in fp32 format for both
 the reference and alternative implementations.
 
-MLPerf will provide a calibration data set for all models except
-GNMT. Submitters may do arbitrary purely mathematical, reproducible quantization
+MLPerf will provide a calibration data set for all models. Submitters may do arbitrary purely mathematical, reproducible quantization
 using only the calibration data and weight and bias tensors from the benchmark
 owner provided model to any numerical format
 that achieves the desired quality. The quantization method must be publicly
@@ -533,7 +532,7 @@ All submissions of code (preprocessing, post-processing, fork of the app and sub
 ** Make copy of submission results template
 ** Enter your submission scores
 *** Precision / 2 decimal places
-** Email to MLPerf Mobile group chairs and cc. David Kanter <david@mlcommons.org> 
+** Email to MLPerf Mobile group chairs and cc. David Tafur <tafur@mlcommons.org> 
 *** Subject: [ MLPerf Mobile Submission ] <Vendor> 
 ** Attach submission results as Excel spreadsheet
 ** Add checklist
@@ -581,10 +580,11 @@ within closed or open category folder:
 ******* mlperf_log_accuracy.json
 
 System names and implementation names may be arbitrary.
-<**benchmark**> must be one of {**mobilenetEdgeTPU, mobiledetSSD, deeplabV3+, mobileBERT**}. 
+<**benchmark**> must be one of {**MobilenetEdgeTPU, MobileDETSSD, MOSAIC, EDSR, MobileBERT**}. 
 <**scenario**> must be one of { **SingleStream, Offline**}.
 Here is the list of mandatory files for all submissions in any division/category. However, your submission should still include all software information and related information for results replication.
 
+* screenshots of the performance and accracy results
 * mlperf_log_accuracy.json (only from the accuracy run)
 * mlperf_log_detail.txt (from both performance and accuracy runs)
 * mlperf_log_summary.txt (from both performance and accuracy runs)
