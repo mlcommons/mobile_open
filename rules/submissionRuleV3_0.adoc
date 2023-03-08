@@ -1,11 +1,11 @@
-= MLPerf Mobile v2.1 Submission Process and Auditing Protocols
+= MLPerf Mobile v3.0 Submission Process and Auditing Protocols
 
 
 == MLPerf Mobile WG
 
 === Submission Procedure Overview
 . Sign MLC CLA
-. If you have any questions, contact David Kanter <david@mlcommons.org> 
+. If you have any questions, contact Chairs or David Tafur <Tafur@mlcommons.org> 
 . Read and abide by confidentiality statement(s) in the repos https://github.com/mlcommons/mobile/blob/master/CONFIDENTIALITY.md 
 . Follow “Backend Integration Procedure” below
 . Validate the required accuracy targets are met and/or share achieved accuracy with the groups to discuss adjustment of accuracy targets as appropriate to the models
@@ -19,7 +19,7 @@
 . Update the LoadGen with the designated commit ID 
 . Integrate vendor backend (if you need to do so)
 . Build vendor forked app	
-. Use the BM ower scripts to download validation data sets and push to device: ImageNet, COCO, ADE20K, SQUAD 1.1
+. Use the BM ower scripts to download validation data sets and push to device: ImageNet, COCO, ADE20K, SQUAD 1.1, SNU dataset
 . Load inference data set(s) 
 . Run benchmark in submission mode to validate accuracy and measure inference performance on the device under test (refers to the vendor submission run conditions)
 . Prepare the deliverable for submissions (Refer to Result Submission Procedure & Vendor Submission Deliverables)
@@ -29,9 +29,7 @@
 ==== Out of the Box status
 . No rooting allowed for phones submitted under Available category  
 . Must use SE-Enforce mode for phones submitted under Available category
-. APP can be installed after a Factory Reset (pick one of the following):
-. Submitter can decide: Factory reset, no updates allowed
-. Submitters can decide: Factory reset, required to update.
+. Submitter can decide the device OS to be tested under one of the following conditions: Factory reset, the latest OTA version, or as-is
 
 ==== Number of iterations
 1
@@ -78,7 +76,7 @@
 *** Enter your submission scores
 **** Precision / 2 decimal places
 *** Fill out submission email
-**** Email to David Kanter <david@mlcommons.org> and cc chairs 
+**** Email to David Tafur <tafur@mlcommons.org> or Nathan Wasson <nathanw@mlcommons.org> and cc chairs 
 **** Subject: [ MLPerf Mobile Submission ] <Vendor> 
 ***Attach submission results as Excel spreadsheet
 ***Add checklist
@@ -118,7 +116,7 @@
 **** <device_id>.json
 *** calibration.md  # quantization writeup
 
-*<Benchmark name>* = {mobilenetEdgeTPU, mobiledetSSD, mobileBERT, mosaic} +
+*<Benchmark name>* = {MobilenetEdgeTPU, MobileDETSSD, MobileBERT, MOSAIC, EDSR} +
 *<scenario>* = {SingleStream, Offline}
 
 === Post-Submission Review/Audit
