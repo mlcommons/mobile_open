@@ -135,6 +135,8 @@ All Closed/available submissions should make the device available for results re
 
 Submitters must provide the device either as a gift/loan or reimburse MLCommons for the purchase of the test system.
 
+RDI submissions will be audited with the backend code and  the respective logs.
+
 == Scenarios
 
 In order to enable representative testing of a wide variety of inference
