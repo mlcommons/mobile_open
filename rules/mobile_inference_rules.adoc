@@ -84,6 +84,12 @@ replication by MLCommons.  This class of systems will be called RDI (research,
 development, internal). RDI systems include reference hardware and software
 modifications such as rooted phones.
 
+RDI will be considered as any physical device that is not commercially available within 1 year. RDI submitter should submit that SoC under available category in the submission that comes immediately after its release. If submitter fails to do this submission, original RDI submission will be marked as invalid
+SoC that later becomes available requires new submission under available or else the RDI results (made after v3.0 and beyond) will be marked as invalid
+
+In order to be published, the RDI can be optionally integrated, depending on the vendor’s willingness, into the backend of the MLPerf app. Any other member can verify this integration giving credibility to this system.
+RDI submitters must support such integration, the integration needs to be completed before presenting public results.
+
 For Available Systems, devices used for testing should be publicly available as 
 commercial devices and device rooting is not allowed. For RDI Systesm, hardware and
 software changes such as rooting should be explicitly mentioned in the device name.
