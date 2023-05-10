@@ -80,12 +80,12 @@ but excludes rooted devices.
 
 If you are measuring the performance of an experimental framework or system, you
 must make the system and framework you use available upon demand for
-replication by MLCommons.  This class of systems will be called RDI (research,
-development, internal). RDI systems include reference hardware and software
+replication by MLCommons.  This class of systems will be called SOC R&D (research,
+development, internal). SOC R&D systems include reference hardware and software
 modifications such as rooted phones.
 
 For Available Systems, devices used for testing should be publicly available as 
-commercial devices and device rooting is not allowed. For RDI Systesm, hardware and
+commercial devices and device rooting is not allowed. For SOC R&D Systesm, hardware and
 software changes such as rooting should be explicitly mentioned in the device name.
 
 === Benchmark implementations must be shared
