@@ -3,7 +3,7 @@
 
 :sectnums:
 
-= MLPerf Mobile Inference Rules
+= MLPerf™ Mobile Inference Rules
 
 Version 3.0
 Updated Feb 28, 2023
