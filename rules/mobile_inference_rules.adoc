@@ -85,7 +85,7 @@ modifications such as rooted phones.
 
 R&D SoC will be considered as any physical device including SoC under test, where the device is not commercially available, and the SoC under test is currently not commercially available, but can be made commercially available at some point in the future.
 
-R&D SoC submitter should submit that SoC under Available category with a commercially available device in the next official submission after the commercial device is available.
+R&D SoC submitter should submit and publish that SoC under Available category with a commercially available device in the next official submission after the commercial device is available.
 
 If submitter fails to do this submission, original R&D SoC submission will be marked as invalid.
 The R&D SoC can be optionally integrated, depending on the vendor’s willingness, into the backend of the MLPerf app. Any other member can verify this integration giving credibility to this system.
