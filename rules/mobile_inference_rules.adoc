@@ -94,6 +94,8 @@ In order to be published R&D SoC submissions will be audited with the backend co
 
 R&D SoC submitter should submit that SoC under Available category with a commercially available device in the next official submission after the commercial device is available
 
+R&D SOC submissions must either be withdrawn or published after the review of the submission. Published SOC R&D submissions are allowed to integrate their backend in MLPerf App.  SOC R&D submission without publication are not allowed to merge backend in MLPerf app. In case benchmark suite for next submission is different, then resubmission in Available category is mandatory only on the benchmark suite that the SOC R&D was submitted on.
+
 For Available Systems, devices used for testing should be publicly available as 
 commercial devices and device rooting is not allowed. For R&D SoC Systems, hardware and
 software changes such as rooting should be explicitly mentioned in the device name.
