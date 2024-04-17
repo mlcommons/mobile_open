@@ -4,6 +4,10 @@ This folder containes the int8 TFLite of MobileNetV4-Conv-Large.
 The [TensorFlow Saved Model](https://github.com/mlcommons/mobile_open/releases/download/model_upload/MobileNetV4-Conv-Large-saved-model.zip), [FP32 TFLite](https://github.com/mlcommons/mobile_open/releases/download/model_upload/MobileNetV4-Conv-Large-fp32.tflite) files are uploaded in a [seperate release](https://github.com/mlcommons/mobile_open/releases/tag/model_upload).
 These models are used for the MLPerf Mobile Image Classification Task.
 
+You can find 
+* the paper at https://arxiv.org/abs/2404.10518
+* the implementation at https://github.com/tensorflow/models/blob/master/official/vision/modeling/backbones/mobilenet.py
+
 ## Accuracy
 |Model | FP32 | Int8 (PTQ) |
 |------|------------------:|-----------------:|
