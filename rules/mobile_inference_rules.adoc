@@ -5,19 +5,18 @@
 
 = MLPerf™ Mobile Inference Rules
 
-Version 3.0
-Updated Feb 28, 2023
+Version 4.0
+Updated May 8, 2025
 This version has been updated, but is not yet final.
 
-Points of contact: David Kanter (david@mlcommons.org), William Chou
-(wchou@qti.qualcomm.com), Manasa Kankanala (manasa.kankanala@intel.com), David Tafur (tafur@mlcommons.org)
+Points of contact: David Kanter (david@mlcommons.org), Scott Wasson (scottw@mlcommons.org)
+Mobile Working Group Cochairs:  Mostafa El-Khamy (elkhamy@mlcommons.org), Freedom Tan (freedomtan@mlcommons.org)
 
 == Overview
 
 This document describes how to implement one or more benchmarks in the MLPerf Mobile
 Inference Suite and how to use those implementations to measure the performance
 of an ML mobile phone/tablet/laptop performing inference.
-
 
 The MLPerf name and logo are trademarks. In order to refer to a result using the
 MLPerf name, the result must conform to the letter and spirit of the rules
@@ -69,40 +68,38 @@ The same system  (phone, laptop) and framework (Vendor SDK, TFlite delegates, or
 NNAPI) must be used for a suite result or set of benchmark results reported in a
 single context.
 
-=== System and framework must be available
+=== System and framework availability
+MLPerf Mobile allows 3 types of submission Categories, Available, R&D SoC, and SoC Integration.
 
-If you are measuring the performance of a publicly available and widely-used
+If you are measuring the performance of a publicly available and widely-used 
 system or framework, you must use publicly available and widely-used versions of
 the system or framework.  This class of systems will be called Available Systems, and 
 availability here means the device is a publicly available commercial device. 
 It includes smartphones, laptops, and other consumer battery powered devices, 
 but excludes rooted devices. 
+For Available Systems, devices used for testing should be publicly available as commercial devices and device rooting is not allowed.
+Depending on the submitter’s willingness, Available systems that are successfully audited can be optionally integrated, into the MLPerf app, and are allowed to have their results published on MLCommons site. 
 
-If you are measuring the performance of an experimental framework or system, you
-must make the system and framework you use available upon demand for
-replication by MLCommons.  This class of systems will be called R&D SoC. R&D SoC systems include reference hardware and software
+If you are measuring the performance of an experimental framework or system, which is not publicy available, this class of systems will be called R&D SoC. R&D SoC systems include reference hardware and software
 modifications such as rooted phones.
-
 R&D SoC will be considered as any physical device including SoC under test, where the device is not commercially available, and the SoC under test is currently not commercially available, but can be made commercially available at some point in the future.
-
 R&D SoC submitter should submit that SoC under Available category with a commercially available device in the next official submission after the commercial device is available.
-
 If submitter fails to do this submission, original R&D SoC submission will be marked as invalid.
-The R&D SoC can be optionally integrated, depending on the vendor’s willingness, into the backend of the MLPerf app. Any other member can verify this integration giving credibility to this system.
+The R&D SoC backend that is successfully audited can be optionally integrated, depending on the vendor’s willingness, into the MLPerf app. Any other member can verify this integration giving credibility to this system.
+R&D SOC submissions must either be withdrawn or published after the review of the submission. Published R&D SoC submissions are allowed to integrate their backend in the MLPerf App. R&D SoC submission without publication are not allowed to merge backend in MLPerf app. In case benchmark suite for next submission is different, then resubmission in Available category is mandatory only on the benchmark suite that the SOC R&D was submitted on.
+For R&D SoC Systems, hardware and software changes such as rooting should be explicitly mentioned in the device name.
 
-In order to be published R&D SoC submissions will be audited with the backend code and the respective logs by examining any modifications to the backend code integrated in the MLPerf app. R&D SoC submitters can also optionally send their engineering R&D device to MLCommons to reproduce their results
+The goal of SoC Integration category is to allow timely integration of vendor backends in the MLPerf app. Submissions under the SoC Integration can be performed anytime, provided reasonable notice is given to MLCommons. 
+Systems submitted under SOC Integration category can be either commercially available devices or devices that are not commercially available such as engineering samples or reference non-commercial designs. 
+Backend of SoCs submitted under the SoC Integration category that are successfully audited can be integrated into the MLPerf app. Any other member can verify this integration giving credibility to this system.
+Submission under the SOC Integration category are not allowed to have their results published on MLCommons site, unless they make a follow-up submission under the Available or R&D SoC Categories.
 
-R&D SoC submitter should submit that SoC under Available category with a commercially available device in the next official submission after the commercial device is available
+For the audit process of the different categories, please refer to the Audit Process section below.
 
-R&D SOC submissions must either be withdrawn or published after the review of the submission. Published SOC R&D submissions are allowed to integrate their backend in MLPerf App.  SOC R&D submission without publication are not allowed to merge backend in MLPerf app. In case benchmark suite for next submission is different, then resubmission in Available category is mandatory only on the benchmark suite that the SOC R&D was submitted on.
-
-For Available Systems, devices used for testing should be publicly available as 
-commercial devices and device rooting is not allowed. For R&D SoC Systems, hardware and
-software changes such as rooting should be explicitly mentioned in the device name.
 
 === Benchmark implementations must be shared
 
-Source code used for the benchmark implementations must be available under a license that permits MLCommon to use the implementation for benchmarking. The submission source code (preprocessing, post processing, and vendor’s glue code with the mlperf app) and logs must be made available to other submitters for auditing purposes
+Source code used for the benchmark implementations must be available under a license that permits MLCommon to use the implementation for benchmarking. The submission source code (preprocessing, post processing, and vendor’s glue code with the MLPerf app) and logs must be made available to other submitters for auditing purposes
 
 === Non-determinism is restricted
 
@@ -137,9 +134,12 @@ input dataset in any form.
 Results that cannot be replicated are not valid results. Both inference and accuracy results should be within 5% with in 5 tries (with a 5 min wait in between).
 
 === Audit Process
-All Closed/available submissions should make the device available for results replication by MLCommons.
-
+All Available submissions should make the device available for results replication by MLCommons. 
 Submitters must provide the device either as a gift/loan or reimburse MLCommons for the purchase of the test system.
+SoC Integration and R&D SOC submitters are not required to send a device to MLCommons to reproduce their submitted results, and are not required to provide SDK for model compilation, but can do so at their willingness.   
+
+All submissions will be audited with the backend code, the respective MLPerf app logs (accuracy and performance), and examining any modifications to the backend code integrated in the MLPerf app. 
+
 
 == Scenarios
 
