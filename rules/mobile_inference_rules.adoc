@@ -150,24 +150,34 @@ described in the table below. The number of queries is selected to ensure suffic
 === Performance run
 |===
 |Scenario |Query Generation |Performance Sample Count |Min Samples to be tested |Min Duration |Tail Latency | Performance Metric
-|MobileNetEdge - Single stream |LoadGen sends next query as soon as SUT completes the previous query | 1024 |1024 |60 sec |90% | 90%-ile measured latency
-|MobileNetEdge - Offline |LoadGen sends all queries to the SUT at start | 1024 | 24,576 |None |N/A | Measured throughput
+|MobileNetV4 - Single stream |LoadGen sends next query as soon as SUT completes the previous query | 1024 |1024 |60 sec |90% | 90%-ile measured latency
+|MobileNetV4 - Offline |LoadGen sends all queries to the SUT at start | 1024 | 24,576 |None |N/A | Measured throughput
 |MobileDet-SSD - Single stream |LoadGen sends next query as soon as SUT completes the previous query | 256 |1024 |60 sec |90% | 90%-ile measured latency
 |MOSAIC - Single stream |LoadGen sends next query as soon as SUT completes the previous query | 256 |1024 |60 sec |90% | 90%-ile measured latency
 |EDSR - Single stream |LoadGen sends next query as soon as SUT completes the previous query | 25 |25 |60 sec |90% | 90%-ile measured latency
 |MobileBERT - Single stream |LoadGen sends next query as soon as SUT completes the previous query | 10833 |1024 |60 sec |90% | 90%-ile measured latency
+|Stable Diffusion V1.5^ - Single stream |LoadGen sends next query as soon as SUT completes the previous query | 1024 |1024 |60 sec |90% | 90%-ile measured latency
+|Llama 3.1 8B^^ - Single stream |LoadGen sends next query as soon as SUT completes the previous query | 100 |1024 |60 sec |mean | mean TFT / mean TPS 
+|Llama 3.2 3B^^^ - Single stream |LoadGen sends next query as soon as SUT completes the previous query | 100 |1024 |60 sec |mean | mean TFT / mean TPS 
 |===
+^   Optional Benchmark, SDv1.5 run with 20 UNET iterations
+^^  Optional Benchmark: Run for both LLM (TInyMMLU-FewShot2) Benchmark and LLM-Instruct (IFEval-33) benchmark, TFT: Time to First Token, TPS: Token Per Second
+^^^ Optional Benchmark: Run for both LLM (TInyMMLU-FewShot2) Benchmark and LLM-Instruct (IFEval-33) benchmark 
+
 
 === Accuracy run
 
 |===
 |Model/Scenario |Accuracy Dataset |URL | Accuracy Target
-|MobileNetEdge - Single stream |ImageNet 2012 validation data set (50000 images) | http://image-net.org/challenges/LSVRC/2012/ | 98% of FP32 (76.19%)
-|MobileNetEdge - Offline |ImageNet 2012 validation data set (50000 images) | http://image-net.org/challenges/LSVRC/2012/ | 98% of FP32 (76.19%)
-|MobileDet-SSD - Single stream |MS-COCO 2017 validation set (5000 images) | http://images.cocodataset.org/zips/val2017.zip | 95% of FP32 (mAP 0.285)
-|MOSAIC - Single stream |ADE20K val set (2000 images) | http://data.csail.mit.edu/places/ADEchallenge/ADEChallengeData2016.zip | 96% of FP32 (mIOU 59.8% 32 classes)
-|EDSR - Single stream |Selected Google Open Image (25 images) | https://github.com/mlcommons/mobile_models/blob/main/v3_0/datasets/snusr_lr.zip | FP32: 33.58dB , Int8: 33dB
-|MobileBERT - Single stream |SQUAD v1.1 Dev (dev-v1.1.json) (10833 samples)  * Mini-validation set with 100 samples is adopted by MWG | https://github.com/google-research/bert#squad-11 | 93% of FP32 (90.5 F1 for first 100 sentences; 89.4 F1 score for full validation set)
+|MobileNetV4 - Single stream |ImageNet 2012 validation data set (50000 images) | http://image-net.org/challenges/LSVRC/2012/ | 81% ~ 98% of FP32 (Top 1: 82.68%) 
+|MobileNetV4 - Offline |ImageNet 2012 validation data set (50000 images) | http://image-net.org/challenges/LSVRC/2012/ | 81% ~ 98% of FP32 (Top 1: 82.68%) 
+|MobileDet-SSD - Single stream |MS-COCO 2017 validation set (5000 images) | http://images.cocodataset.org/zips/val2017.zip | 27.075% ~ 95% of FP32 (mAp: 28.5%)
+|MOSAIC - Single stream |ADE20K val set (2000 images) | http://data.csail.mit.edu/places/ADEchallenge/ADEChallengeData2016.zip | 57.4% ~ 96% of FP32 (32-class mIOU: 59.8%)
+|EDSR - Single stream |Selected Google Open Image (25 images) | https://github.com/mlcommons/mobile_models/blob/main/v3_0/datasets/snusr_lr.zip | 33 dB PSNR (FP32: 33.58 dB) 
+|MobileBERT - Single stream |SQUAD v1.1 Dev (dev-v1.1.json) (10833 samples)  * Mini-validation set with 100 samples is adopted by MWG | https://github.com/google-research/bert#squad-11 | 87.4% ~ 93% of FP32 (F1-score 94%) 
+|Stable Diffusion V1.5 - Single stream | MS-COCO 2014 captions| https://huggingface.co/datasets/justram/COCO2014-Captions| 25 CLIP Score (FP16 CLIP Score 25.31)
+|Llama 3.1 8B - Single stream |TInyMMLU and Tiny-IFEval-33 |  https://huggingface.co/datasets/tinyBenchmarks/tinyMMLU & [IFEval33](/dataset/ifeval_33.jsonl)|TBD
+|Llama 3.2 3B - Single stream |TInyMMLU and Tiny-IFEval-33 |  https://huggingface.co/datasets/tinyBenchmarks/tinyMMLU & [IFEval33](/dataset/ifeval_33.jsonl)|TBD
 |===
 == Benchmarks
 
@@ -560,15 +570,14 @@ within closed or open category folder:
 ** Calibration.md (Quantization writeup)
 ** systems/
 <system_desc_id>.json # combines hardware and software stack information
+
 ** code/
 *** <Custom Model> (if the models are not deterministically generated)
 *** <Benchmark>
-**** TF/TFlite model files
-**** Calibration_process.adoc 
+**** Calibration_process.adoc (Vendor model files and/or instructions to generate them)
 *** <Runtime>/
-**** <git commit from the private submitter repo> 
-**** (For SS’ private SDK) <git commit ID for the version of the SDK used for submission> 
-
+**** Instructions to build apk with vendor backend and <git commit from the mobile_app_closed repo> 
+**** Additional instructions and code
 
 ** measurements/
 *** <system_desc_id>/
@@ -577,33 +586,35 @@ within closed or open category folder:
 ****** <system_desc_id>_<runtime>_<scenario>.json (example here)
 
 ** results/
-*** <system_desc_id>/
-**** result.json
-**** screenshots of the inference and accuracy results
-**** <benchmark>/
-***** <scenario>
-****** mlperf_log_detail.txt  <=from performance run
-****** mlperf_log_summary.txt  <= from performance run
-****** mlperf_log_trace.json <= from performance run
-****** <accuracy>
-******* mlperf_log_detail.txt  
-******* mlperf_log_summary.txt 
-******* mlperf_log_trace.json 
-******* mlperf_log_accuracy.json
+*** screenshots of the performance and accracy results
+*** result.json (Summary result file copied directly from DUT: \Internal storage\Android\data\org.mlcommons.android.mlperfbench\files\results)
+***YYYY-MM-DDTHH-MM-SS.SSSSS (Results Log folder copied directly from DUT: \Internal storage\Android\data\org.mlcommons.android.mlperfbench\files\logs)
+**** <scenario>
+***** mlperf_log_detail.txt  <=from performance run
+***** mlperf_log_summary.txt  <= from performance run
+***** mlperf_log_trace.json <= from performance run
+***** <accuracy>
+****** mlperf_log_detail.txt  
+****** mlperf_log_summary.txt 
+****** mlperf_log_trace.json 
+****** mlperf_log_accuracy.json
 
 System names and implementation names may be arbitrary.
-<**benchmark**> must be one of {**MobilenetEdgeTPU, MobileDETSSD, MOSAIC, EDSR, MobileBERT**}. 
+<**benchmark**> must be one of {**MobilenetV4, MobiledEtSSD, MOSAIC, EDSR, MobileBERT, stableDiffusion, LLama3p1_8B, Llama3p2_3B**}. 
 <**scenario**> must be one of { **SingleStream, Offline**}.
-Here is the list of mandatory files for all submissions in any division/category. However, your submission should still include all software information and related information for results replication.
 
-* screenshots of the performance and accracy results
+Multiple results folders and result.json files, corresponding to different Submission Runs can be submitted: 
+*Gen-AI models (Stable-Diffusion, Llama 3.1 8B, Llama 3.2 3B Submission runs may be performed in separate Submission Runs in MLPerf App, hence may have their own results folder and result.json file)
+*Other models must be run in a Single Submission run, and submitted in the same results folder, and in same result.json file as generated by the app.
+
+Here is the list of mandatory files for all submissions in any division/category. However, your submission should still include all software information and related information for results replication.
 * mlperf_log_accuracy.json (only from the accuracy run)
 * mlperf_log_detail.txt (from both performance and accuracy runs)
 * mlperf_log_summary.txt (from both performance and accuracy runs)
 * mlperf_log_trace.json (from both performance and accuracy runs)
 * (if the original MLPerf models are not used) calibration or weight transformation related code 
 * ( if the models are not deterministically generated) actual models
-Vendor’s glue code which interfaces with Mlperf app frontend 
+Vendor’s glue code which interfaces with Mlperf app frontend must be commited in mlperf_app_closed 
 
 * <system_desc_id>_<implementation_id>_<scenario>.json
 
@@ -641,18 +652,6 @@ For inference, the source code, pseudo-code, or prose description must be suffic
 * Weights (please notify results chair if > 2 GB combined)
 * Weight transformations
 ** If weight transformations are non-deterministic, then any randomness seeds used must be included in the submission.
-
-=== Provisional Submissions
-
-Provisional submissions are designed to allow submission, publication, and use of official MLPerf Mobile official results outside of the regular submission schedule. Most importantly, a provisional submission is required to pre-integrate submitter backends into the official app. Provisional submissions require the submitter to have completed an on-cycle submission within the past year and participate in the weekly engineering meetings, or must be approved by the MLCommons executive director and WG chairs. Provisional submissions may only be submitted on the latest official version.
-
-Submitters will notify the MLCommons executive director at least 4 weeks prior to submission, and MLCommons will create a private repo for the provisional submission. The private repository will be visible to only MLCommons and WG members. The submitter will then upload the content of their submission to the agreed upon submission repo, the content of which will be identical to that of an official submission. The Mobile WG will inspect the code at its discretion, and ask the submitter to make changes if needed. 
-
-MLCommons will then integrate the vendor backend into the app, and distribute a version of the app to members for testing and sign-off for release by members. The vendor backends of other members will be the latest version from mobile_app_open, granted that the backend owner has submitted within the past year, and is actively participating in engineering meetings.
-
-The device will undergo audit by a designated auditor and WG members for up to five weeks or sign-off from other WG members, whichever comes first. Once the device passes the audit from the designated auditor, at the submitter’s request, the result is added to the results board for the given version of the app, and the official app will be made publicly available. The app version and date used to derive the results will be noted within the result details.
-
-
 
 == Review
 
