@@ -3,7 +3,7 @@
 
 :sectnums:
 
-= MLPerf™ Mobile Inference Rules
+= MLPerf Mobile Inference Rules
 
 Version 4.0
 Updated May 8, 2025
@@ -14,7 +14,7 @@ Mobile Working Group Cochairs:  Mostafa El-Khamy (elkhamy@mlcommons.org), Freedo
 
 == Overview
 
-This document describes how to implement one or more benchmarks in the MLPerf Mobile
+This document describes how to implement one or more benchmarks in the MLPerf® Mobile
 Inference Suite and how to use those implementations to measure the performance
 of an ML mobile phone/tablet/laptop performing inference.
 
