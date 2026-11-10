@@ -6,6 +6,38 @@
 namespace mlperf {
 namespace mobile {
 
+namespace {
+
+std::string remove_special_tokens(const std::string& s) {
+  std::string out;
+  out.reserve(s.size());
+  std::size_t i = 0;
+  while (i < s.size()) {
+    if (s[i] == '<') {
+      std::size_t j = i + 1;
+      while (j < s.size() && s[j] != '<' && s[j] != '>' &&
+             !std::isspace(static_cast<unsigned char>(s[j])))
+        ++j;
+      if (j < s.size() && s[j] == '>') {
+        std::string piece = s.substr(i, j - i + 1);
+        if (piece == "<pad>" || piece == "<eos>" || piece == "<bos>" ||
+            piece == "<mask>" ||
+            (piece.size() > 3 &&
+             (piece.compare(0, 2, "<|") == 0 ||
+              piece.compare(piece.size() - 2, 2, "|>") == 0))) {
+          i = j + 1;
+          continue;
+        }
+      }
+    }
+    out.push_back(s[i]);
+    ++i;
+  }
+  return out;
+}
+
+}  // namespace
+
 IFEval::IFEval(const std::string& input_tfrecord)
    {
 
@@ -21,7 +53,8 @@ IFEval::IFEval(const std::string& input_tfrecord)
     auto record = input[i];
     int key = record["key"].as_i();
     std::string prompt = record["prompt"].as_string();
-    std::string response = record["response"].as_string();
+    std::string response =
+        remove_special_tokens(record["response"].as_string());
     auto instructions = BuildInstructions(record);
 
     //std::string input_formatted = FormatLlamaUserPrompt(prompt);

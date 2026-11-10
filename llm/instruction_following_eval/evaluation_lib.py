@@ -168,13 +168,35 @@ def test_instruction_following_loose(
   )
 
 
+def remove_special_tokens(s):
+  out = []
+  i = 0
+  while i < len(s):
+    if s[i] == "<":
+      j = i + 1
+      while (j < len(s) and s[j] != "<" and s[j] != ">" and
+             s[j] not in " \t\n\v\f\r"):
+        j += 1
+      if j < len(s) and s[j] == ">":
+        piece = s[i:j + 1]
+        if (piece == "<pad>" or piece == "<eos>" or piece == "<bos>" or
+            piece == "<mask>" or
+            (len(piece) > 3 and
+             (piece.startswith("<|") or piece.endswith("|>")))):
+          i = j + 1
+          continue
+    out.append(s[i])
+    i += 1
+  return "".join(out)
+
+
 def read_prompt_to_response_dict(input_jsonl_filename):
   """Creates dictionary matching prompt and response."""
   return_dict = {}
   with open(input_jsonl_filename, "r") as f:
     for l in f:
       example = json.loads(l)
-      return_dict[example["prompt"]] = example["response"]
+      return_dict[example["prompt"]] = remove_special_tokens(example["response"])
   return return_dict
 
 
