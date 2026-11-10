@@ -58,18 +58,38 @@ inline bool contains_string(const std::string& text,
   return h.find(n) != std::string::npos;
 }
 
+// Python's len() counts characters; count UTF-8 lead bytes to match it.
+inline size_t utf8_len(const std::string& s) {
+  size_t n = 0;
+  for (unsigned char c : s) n += (c & 0xC0) != 0x80;
+  return n;
+}
+
+// Byte offset where character n starts (s.size() if s is shorter).
+inline size_t utf8_offset(const std::string& s, size_t n) {
+  size_t i = 0;
+  for (; i < s.size(); ++i) {
+    if ((static_cast<unsigned char>(s[i]) & 0xC0) == 0x80) continue;
+    if (n == 0) break;
+    --n;
+  }
+  return i;
+}
+
 inline bool ends_with(const std::string& s, const std::string& suf,
                       unsigned threshold) {
-  if (s.size() < suf.size()) return false;
-  std::string a = tolower(s.substr(s.size() - (suf.size() + threshold)));
+  size_t ls = utf8_len(s), lsuf = utf8_len(suf), win = lsuf + threshold;
+  if (ls < lsuf) return false;
+  std::string a = tolower(s.substr(utf8_offset(s, ls > win ? ls - win : 0)));
   std::string b = tolower(suf);
   return threshold == 0 ? a == b : contains_string(a, b);
 }
 
 inline bool starts_with(const std::string& s, const std::string& prf,
                         unsigned threshold) {
-  if (s.size() < prf.size()) return false;
-  std::string a = tolower(s.substr(0, prf.size() + threshold));
+  size_t lprf = utf8_len(prf);
+  if (utf8_len(s) < lprf) return false;
+  std::string a = tolower(s.substr(0, utf8_offset(s, lprf + threshold)));
   std::string b = tolower(prf);
   return threshold == 0 ? a == b : contains_string(a, b);
 }
@@ -202,9 +222,10 @@ inline std::array<std::string, 8> transform_response(const std::string& resp) {
   std::array<std::string, 8> out{};
   for (int mask = 0; mask < 8; ++mask) {
     std::string t = resp;
-    if (mask & 0b001) t = remove_font_modifiers(t);
     if (mask & 0b010) t = remove_first_line(t);
     if (mask & 0b100) t = remove_last_line(t);
+    if (mask & 0b110) t = trim(t);  // python strips after removing a line
+    if (mask & 0b001) t = remove_font_modifiers(t);
     out[mask] = std::move(t);
   }
   return out;

@@ -46,12 +46,13 @@ class Instruction {
   virtual constexpr InstructionGroup Group() = 0;
 
   bool IsFollowed(const std::string& resp, bool loose = false) const {
+    // Blank text never counts as following (matches the python reference)
     // For strict checks, just verify the response itself
-    if (!loose) return verify_(resp);
+    if (!loose) return !trim(resp).empty() && verify_(resp);
 
     auto transformations = transform_response(resp);
     for (std::string transformation : transformations) {
-      if (verify_(transformation)) return true;
+      if (!trim(transformation).empty() && verify_(transformation)) return true;
     }
     return false;
   }
@@ -229,12 +230,13 @@ class ConstrainedResponse : public Instruction {
   const std::string aMaybe = "My answer is maybe.";
   const unsigned sizeThreshold = 3;
   virtual bool verify_(const std::string& resp) const override {
+    const size_t n = utf8_len(resp);
     return (resp.find(aYes) != std::string::npos &&
-            resp.size() <= sizeThreshold + aYes.size()) ||
+            n <= sizeThreshold + aYes.size()) ||
            (resp.find(aNo) != std::string::npos &&
-            resp.size() <= sizeThreshold + aNo.size()) ||
+            n <= sizeThreshold + aNo.size()) ||
            (resp.find(aMaybe) != std::string::npos &&
-            resp.size() <= sizeThreshold + aMaybe.size());
+            n <= sizeThreshold + aMaybe.size());
   }
 };
 
@@ -905,7 +907,8 @@ class Quotation : public Instruction {
 
  private:
   virtual bool verify_(const std::string& resp) const override {
-    return resp.size() >= 2 && resp.front() == '"' && resp.back() == '"';
+    const std::string t = trim(resp);
+    return t.size() >= 2 && t.front() == '"' && t.back() == '"';
   }
 };
 
