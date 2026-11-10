@@ -58,18 +58,36 @@ inline bool contains_string(const std::string& text,
   return h.find(n) != std::string::npos;
 }
 
+inline size_t utf8_len(const std::string& s) {
+  size_t n = 0;
+  for (unsigned char c : s) n += (c & 0xC0) != 0x80;
+  return n;
+}
+
+inline size_t utf8_offset(const std::string& s, size_t n) {
+  size_t i = 0;
+  for (; i < s.size(); ++i) {
+    if ((static_cast<unsigned char>(s[i]) & 0xC0) == 0x80) continue;
+    if (n == 0) break;
+    --n;
+  }
+  return i;
+}
+
 inline bool ends_with(const std::string& s, const std::string& suf,
                       unsigned threshold) {
-  if (s.size() < suf.size()) return false;
-  std::string a = tolower(s.substr(s.size() - (suf.size() + threshold)));
+  size_t ls = utf8_len(s), lsuf = utf8_len(suf), win = lsuf + threshold;
+  if (ls < lsuf) return false;
+  std::string a = tolower(s.substr(utf8_offset(s, ls > win ? ls - win : 0)));
   std::string b = tolower(suf);
   return threshold == 0 ? a == b : contains_string(a, b);
 }
 
 inline bool starts_with(const std::string& s, const std::string& prf,
                         unsigned threshold) {
-  if (s.size() < prf.size()) return false;
-  std::string a = tolower(s.substr(0, prf.size() + threshold));
+  size_t lprf = utf8_len(prf);
+  if (utf8_len(s) < lprf) return false;
+  std::string a = tolower(s.substr(0, utf8_offset(s, lprf + threshold)));
   std::string b = tolower(prf);
   return threshold == 0 ? a == b : contains_string(a, b);
 }
@@ -162,7 +180,8 @@ inline std::string remove_font_modifiers(const std::string& s) {
 
     // skip emphasis/strong/strike/escape chars as long as they're not preceeded
     // by an escape character
-    if ((c == '*' || c == '_' || c == '~' || c == '\\') && s[i - 1] != '\\')
+    if ((c == '*' || c == '_' || c == '~' || c == '\\') &&
+        (i == 0 || s[i - 1] != '\\'))
       continue;
 
     // remove heading markers (#) at line starts
